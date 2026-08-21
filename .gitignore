@@ -2,3 +2,4 @@ temp/
 *.pycvenv/
 __pycache__/
 .env
+venv/
