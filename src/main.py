@@ -2,6 +2,8 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 import models
 from database import engine, get_db
+from schemas import UserCreate, UserLogin
+from security import hash_password, verify_password, create_access_token
 
 models.Base.metadata.create_all(bind=engine) ## Create all tables in the database
 
