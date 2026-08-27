@@ -97,6 +97,30 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
 
     return user
 
+class RoleChecker:
+    def __init__(self, allowed_roles: list[str]):
+        self.allowed_roles = allowed_roles
+    
+    def __call__(self, current_user: models.User = Depends(get_current_user)):
+        if current_user.role not in self.allowed_roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Access denied: Role '{current_user.role}' lacks permission to access this resource."
+            )
+        return current_user
+
+@app.get("/api/dashboard")
+def view_dashboard(current_user: models.User = Depends(RoleChecker(["Admin", "Analyst", "Viewer"]))):
+    return {"message": "Welcome to the public telemetry dashboard."}
+
+@app.get("/api/telemetry/metrics")
+def view_metrics(current_user: models.User = Depends(RoleChecker(["Admin", "Analyst", ]))):
+    return {"message": "Sensitive system metrics", "data": {"cpu_load": "12%", "ram_usage": "45%"}}
+
+@app.get("/api/telemetry/system_reset")
+def system_reset(current_user: models.User = Depends(RoleChecker(["Admin"]))):
+    return {"message": "System settings accessed successfully."}
+
 @app.get("/api/me")
 def get_my_profile(current_user: models.User = Depends(get_current_user)):
     return {
