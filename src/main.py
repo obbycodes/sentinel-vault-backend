@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException, Response, Request, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 import models
+import schemas
 from database import engine, get_db
 from schemas import UserCreate, UserLogin
 from security import hash_password, verify_password, create_access_token, decode_access_token
@@ -19,7 +20,7 @@ def read_root():
     return {
         "system": "SentinelVault Telemetry Engine",
         "status": "operational",
-        "version": "0.2.0",
+        "version": "0.3.0",
     }
 
 @app.get("/health")
@@ -55,6 +56,7 @@ def login_user(credentials: UserLogin, response: Response, db: Session = Depends
     user = db.query(models.User).filter(models.User.username == credentials.username).first()
 
     if not user or not verify_password(credentials.password, user.hashed_password):
+        log_audit_event(db, "LOGIN_FAILED", f"Failed login attempt for username: {credentials}.",user_id=user.id)
         raise HTTPException(status_code=401, detail="Invalid username or password")
     
     token = create_access_token({
@@ -77,6 +79,8 @@ def login_user(credentials: UserLogin, response: Response, db: Session = Depends
         secure=False,
         samesite="lax"
     )
+
+    log_audit_event(db, "LOGIN_SUCCESS", f"User logged in successfully", user_id=user.id)
 
     return response
 
@@ -129,3 +133,22 @@ def get_my_profile(current_user: models.User = Depends(get_current_user)):
         "email": current_user.email,
         "role": current_user.role
     }
+
+
+def log_audit_event(db: Session, event_type: str, description: str, user_id: int | None):
+    log_entry = models.TelemetryLog(
+        user_id=user_id,
+        event_type=event_type,
+        description=description
+    )
+    db.add(log_entry)
+    db.commit()
+
+
+@app.get("/api/telemetry/logs", response_model=list[schemas.TelemetryLogResponse])
+def get_audit_logs(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(RoleChecker(["Admin", "Analyst"]))
+):
+    logs = db.query(models.TelemetryLog).order_by(models.TelemetryLog.timestamp.description)
+    return logs
