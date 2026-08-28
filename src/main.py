@@ -52,7 +52,7 @@ def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
     return {"message": "User successfully registered!", "user_id": new_user.id}
 
 @app.post("/api/login", responses={401:{"description":"Unauthorized", "content": {"application.json": {"example": {"detail": {"Invalid username or password."}}}}}})
-def login_user(credentials: UserLogin, response: Response, db: Session = Depends(get_db)):
+def login_user(credentials: UserLogin, response, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.username == credentials.username).first()
 
     if not user or not verify_password(credentials.password, user.hashed_password):
