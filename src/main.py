@@ -30,11 +30,11 @@ def health_check(db: Session = Depends(get_db)):
         "database": "connected"
     }
 
-@app.post("/api/register", status_code=status.HTTP_201_CREATED)
+@app.post("/api/register", responses={409:{"description":"Conflict", "content": {"application.json": {"example": {"detail": {"User already registered."}}}}}} , status_code=status.HTTP_201_CREATED)
 def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
     existing_user = db.query(models.User).filter(models.User.username == user_data.username).first()
     if existing_user:
-        raise HTTPException(status_code=400, detail="Username already registered.")
+        raise HTTPException(status_code=409, detail="User already registered.")
     
     hashed_pwd = hash_password(user_data.password)
 
@@ -51,12 +51,12 @@ def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
 
     return {"message": "User successfully registered!", "user_id": new_user.id}
 
-@app.post("/api/login")
+@app.post("/api/login", responses={401:{"description":"Unauthorized", "content": {"application.json": {"example": {"detail": {"Invalid username or password."}}}}}})
 def login_user(credentials: UserLogin, response: Response, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.username == credentials.username).first()
 
     if not user or not verify_password(credentials.password, user.hashed_password):
-        log_audit_event(db, "LOGIN_FAILED", f"Failed login attempt for username: {credentials}.",user_id=user.id)
+        log_audit_event(db, "LOGIN_FAILED", f"Failed login attempt for username: {credentials}.", user_id=None)
         raise HTTPException(status_code=401, detail="Invalid username or password")
     
     token = create_access_token({
@@ -80,7 +80,7 @@ def login_user(credentials: UserLogin, response: Response, db: Session = Depends
         samesite="lax"
     )
 
-    log_audit_event(db, "LOGIN_SUCCESS", f"User logged in successfully", user_id=user.id)
+    log_audit_event(db, "LOGIN_SUCCESS", "User logged in successfully", user_id=user.id)
 
     return response
 
