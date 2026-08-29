@@ -1,6 +1,9 @@
 from fastapi import FastAPI, Depends, HTTPException, Response, Request, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 import models
 import schemas
 from database import engine, get_db
@@ -9,11 +12,16 @@ from security import hash_password, verify_password, create_access_token, decode
 
 models.Base.metadata.create_all(bind=engine) ## Create all tables in the database
 
+limiter = Limiter(key_func=get_remote_address)
+
 app = FastAPI(
     title="SentinelVault",
     description="Enterprise Asset & Secure Telemetry Platform",
     version="0.2.0",
 )
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 @app.get("/")
 def read_root():
@@ -30,8 +38,15 @@ def health_check(db: Session = Depends(get_db)):
         "database": "connected"
     }
 
-@app.post("/api/register", responses={409:{"description":"Conflict", "content": {"application.json": {"example": {"detail": {"User already registered."}}}}}} , status_code=status.HTTP_201_CREATED)
-def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
+
+@app.post("/api/register", 
+responses={
+    409:{"description":"Conflict", "content": {"application.json": {"example": {"detail": {"User already registered."}}}}}, 
+    429:{"description":"Too Many Requests", "content": {"application.json": {"example": {"detail": {"Rate limit exceeded. 3 per 1 minute."}}}}}
+},
+    status_code=status.HTTP_201_CREATED)
+@limiter.limit("3/minute")
+def register_user(request: Request, user_data: UserCreate, db: Session = Depends(get_db)):
     existing_user = db.query(models.User).filter(models.User.username == user_data.username).first()
     if existing_user:
         raise HTTPException(status_code=409, detail="User already registered.")
@@ -51,8 +66,14 @@ def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
 
     return {"message": "User successfully registered!", "user_id": new_user.id}
 
-@app.post("/api/login", responses={401:{"description":"Unauthorized", "content": {"application.json": {"example": {"detail": {"Invalid username or password."}}}}}})
-def login_user(credentials: UserLogin, response, db: Session = Depends(get_db)):
+
+@app.post("/api/login", 
+responses={
+    401:{"description":"Unauthorized", "content": {"application.json": {"example": {"detail": {"Invalid username or password."}}}}},
+    429:{"description":"Too Many Requests", "content": {"application.json": {"example": {"detail": {"Rate limit exceeded: 3 per 1 minute."}}}}}
+})
+@limiter.limit("3/minute")
+def login_user(request: Request, credentials: UserLogin, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.username == credentials.username).first()
 
     if not user or not verify_password(credentials.password, user.hashed_password):
@@ -60,7 +81,7 @@ def login_user(credentials: UserLogin, response, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Invalid username or password")
     
     token = create_access_token({
-        "sub": user.username,
+        "username": user.username,
         "user_id": user.id,
         "role": user.role
     })
@@ -113,20 +134,40 @@ class RoleChecker:
             )
         return current_user
 
-@app.get("/api/dashboard")
-def view_dashboard(current_user: models.User = Depends(RoleChecker(["Admin", "Analyst", "Viewer"]))):
+@app.get("/api/dashboard", 
+    responses={
+    429:{"description":"Too Many Requests", "content": {"application.json": {"example": {"detail": {"Rate limit exceeded. 10 per minute."}}}}}
+    },
+)
+@limiter.limit("10/minute")
+def view_dashboard(request: Request, current_user: models.User = Depends(RoleChecker(["Admin", "Analyst", "Viewer"]))):
     return {"message": "Welcome to the public telemetry dashboard."}
 
-@app.get("/api/telemetry/metrics")
-def view_metrics(current_user: models.User = Depends(RoleChecker(["Admin", "Analyst", ]))):
+@app.get("/api/telemetry/metrics",
+    responses={
+        429:{"description":"Too Many Requests", "content": {"application.json": {"example": {"detail": {"Rate limit exceeded. 7 per minute."}}}}}
+    },
+)
+@limiter.limit("7/minute")
+def view_metrics(request: Request, current_user: models.User = Depends(RoleChecker(["Admin", "Analyst", ]))):
     return {"message": "Sensitive system metrics", "data": {"cpu_load": "12%", "ram_usage": "45%"}}
 
-@app.get("/api/telemetry/system_reset")
-def system_reset(current_user: models.User = Depends(RoleChecker(["Admin"]))):
+@app.get("/api/telemetry/system_reset", 
+    responses={
+        429:{"description":"Too Many Requests", "content": {"application.json": {"example": {"detail": {"Rate limit exceeded. 1 per minute."}}}}}
+    },
+)
+@limiter.limit("1/minute")
+def system_reset(request: Request, current_user: models.User = Depends(RoleChecker(["Admin"]))):
     return {"message": "System settings accessed successfully."}
 
-@app.get("/api/me")
-def get_my_profile(current_user: models.User = Depends(get_current_user)):
+@app.get("/api/me", 
+    responses={
+        429:{"description":"Too Many Requests", "content": {"application.json": {"example": {"detail": {"Rate limit exceeded. 10 per minute."}}}}}
+    },
+)
+@limiter.limit("10/minute")
+def get_my_profile(request: Request, current_user: models.User = Depends(get_current_user)):
     return {
         "id": current_user.id,
         "username": current_user.username,
@@ -145,8 +186,16 @@ def log_audit_event(db: Session, event_type: str, description: str, user_id: int
     db.commit()
 
 
-@app.get("/api/telemetry/logs", response_model=list[schemas.TelemetryLogResponse])
+@app.get("/api/telemetry/logs", 
+    responses={
+        429:{"description":"Too Many Requests", "content": {"application.json": {"example": {"detail": {"Rate limit exceeded. 5 per minute."}}}}}
+    },
+    response_model=list[schemas.TelemetryLogResponse]
+)
+@limiter.limit("5/minute") 
+
 def get_audit_logs(
+    request: Request,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(RoleChecker(["Admin", "Analyst"]))
 ):
