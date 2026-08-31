@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey, Float
 from database import Base
 from datetime import datetime, timezone
 from sqlalchemy.orm import relationship
@@ -22,3 +22,13 @@ class TelemetryLog(Base):
     timestamp = Column[datetime](DateTime, default=lambda: datetime.now(timezone.utc))
 
     user = relationship("User")
+
+class DeviceTelemetry(Base):
+    __tablename__ = "device_telemetry"
+
+    id = Column(Integer, primary_key=True, index=True)
+    device_id = Column(String, index=True, nullable=False)
+    cpu_usage = Column(Float, nullable=False)
+    memory_usage = Column(Float, nullable=False)
+    status = Column(String, default="NORMAL")
+    timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc))

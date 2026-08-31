@@ -17,7 +17,7 @@ limiter = Limiter(key_func=get_remote_address)
 app = FastAPI(
     title="SentinelVault",
     description="Enterprise Asset & Secure Telemetry Platform",
-    version="0.2.0",
+    version="0.4.0",
 )
 
 app.state.limiter = limiter
@@ -38,7 +38,7 @@ def read_root():
     return {
         "system": "SentinelVault Telemetry Engine",
         "status": "operational",
-        "version": "0.3.0",
+        "version": "0.4.0"
     }
 
 @app.get("/health")
@@ -211,3 +211,32 @@ def get_audit_logs(
 ):
     logs = db.query(models.TelemetryLog).order_by(models.TelemetryLog.timestamp.description)
     return logs
+
+@app.post("/api/telemetry/submit", status_code=status.HTTP_201_CREATED)
+def submit_telemetry(
+    data: schemas.TelemetrySubmit,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(RoleChecker(["Admin", "Analyst"]))
+):
+    # 1. Instantiate telemetry model using sanitized inputs
+    entry = models.DeviceTelemetry(
+        device_id=data.device_id,
+        cpu_usage=data.cpu_usage,
+        memory_usage=data.memory_usage,
+        status=data.status
+    )
+    
+    # 2. Persist using parameterized SQLAlchemy query
+    db.add(entry)
+    db.commit()
+    db.refresh(entry)
+    
+    # 3. Write event to audit log
+    log_audit_event(
+        db, 
+        event_type="TELEMETRY_INGESTED", 
+        description=f"Device {data.device_id} reported CPU: {data.cpu_usage}%", 
+        user_id=current_user.id
+    )
+    
+    return {"message": "Telemetry recorded successfully", "telemetry_id": entry.id}
