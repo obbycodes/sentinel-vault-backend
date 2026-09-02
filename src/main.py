@@ -233,6 +233,8 @@ def submit_telemetry(
     db.commit()
     db.refresh(entry)
     
+    is_anomaly = evaluate_device_anomalies(db, entry, user_id=current_user.id)
+
     # 3. Write event to audit log
     log_audit_event(
         db, 
@@ -241,7 +243,10 @@ def submit_telemetry(
         user_id=current_user.id
     )
     
-    return {"message": "Telemetry recorded successfully", "telemetry_id": entry.id}
+    return {"message": "Telemetry recorded successfully", 
+            "telemetry_id": entry.id,
+            "anomaly_flagged": is_anomaly,
+            "status": entry.status}
 
 @app.get("/api/telemetry/query", response_model=list[schemas.DeviceTelemetryResponse])
 def query_telemetry(
@@ -262,3 +267,30 @@ def query_telemetry(
     records = query.order_by(models.DeviceTelemetry.timestamp.desc()).offset(offset).limit(limit).all()
     
     return records
+
+def evaluate_device_anomalies(db: Session, telemetry_entry: models.DeviceTelemetry, user_id: int):
+    CPU_THRESHOLD = 85.0
+    MEMORY_THRESHOLD = 90.0
+    
+    anomalies = []
+    if telemetry_entry.cpu_usage > CPU_THRESHOLD:
+        anomalies.append(f"High CPU utilization ({telemetry_entry.cpu_usage}%)")
+    if telemetry_entry.memory_usage > MEMORY_THRESHOLD:
+        anomalies.append(f"High Memory utilization ({telemetry_entry.memory_usage}%)")
+        
+    if anomalies:
+        # 1. Update telemetry status in database
+        telemetry_entry.status = "CRITICAL"
+        db.commit()
+        
+        # 2. Record critical security alert in telemetry logs
+        details = f"Anomaly detected on {telemetry_entry.device_id}: " + ", ".join(anomalies)
+        log_audit_event(
+            db, 
+            event_type="CRITICAL_ANOMALY", 
+            description=details, 
+            user_id=user_id
+        )
+        return True
+    return False
+
