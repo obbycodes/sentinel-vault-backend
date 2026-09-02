@@ -25,3 +25,14 @@ class TelemetrySubmit(BaseModel):
     cpu_usage: float = Field(..., ge=0.0, le=100.0)
     memory_usage: float = Field(..., ge=0.0, le=100.0)
     status: str = Field("NORMAL", max_length=20)
+
+class DeviceTelemetryResponse(BaseModel):
+    id: int
+    device_id: str
+    cpu_usage: float
+    memory_usage: float
+    status: str
+    timestamp: datetime
+
+    class Config:
+        from_attributes = True

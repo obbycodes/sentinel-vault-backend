@@ -1,9 +1,11 @@
-from fastapi import FastAPI, Depends, HTTPException, Response, Request, status
+from fastapi import FastAPI, Depends, HTTPException, Response, Request, status, Query
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+from typing import Optional, Annotated
+from pydantic import Field
 import models
 import schemas
 from database import engine, get_db
@@ -240,3 +242,23 @@ def submit_telemetry(
     )
     
     return {"message": "Telemetry recorded successfully", "telemetry_id": entry.id}
+
+@app.get("/api/telemetry/query", response_model=list[schemas.DeviceTelemetryResponse])
+def query_telemetry(
+    device_id: Optional[str] = None,
+    limit: Annotated[int, Query(ge=1, le=100)] = 20,
+    offset: Annotated[int, Query(ge=0)] = 0,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(RoleChecker(["Admin", "Analyst", "Viewer"]))
+):
+    # 1. Start base query
+    query = db.query(models.DeviceTelemetry)
+    
+    # 2. Apply optional device_id filter
+    if device_id:
+        query = query.filter(models.DeviceTelemetry.device_id == device_id)
+        
+    # 3. Apply sorting (newest first) and pagination window
+    records = query.order_by(models.DeviceTelemetry.timestamp.desc()).offset(offset).limit(limit).all()
+    
+    return records
