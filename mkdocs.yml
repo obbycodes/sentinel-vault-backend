@@ -1,0 +1,31 @@
+site_name: SentinelVault Documentation
+site_description: Security architecture, threat modeling, and implementation logs.
+site_author: Your Name
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: cyan
+  features:
+    - navigation.expand
+    - navigation.sections
+    - content.code.copy
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_div_format
+
+nav:
+  - Overview: index.md
+  - Architecture:
+      - Stateless Cryptographic Signing: architecture/token_signing.md
+      - Database Design: architecture/database.md
+  - Security & Testing:
+      - Threat Model: security/threat_model.md
+      - Test Suite: security/test_logs.md
