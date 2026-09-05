@@ -1,6 +1,7 @@
 site_name: SentinelVault Documentation
 site_description: Security architecture, threat modeling, and implementation logs.
 site_author: Your Name
+docs_dir: sentinel-vault-backend/docs
 
 theme:
   name: material
@@ -22,7 +23,7 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_div_format
 
 nav:
-  - Overview: index.md
+  - Overview: docs/index.md
   - Architecture:
       - Stateless Cryptographic Signing: architecture/token_signing.md
       - Database Design: architecture/database.md
