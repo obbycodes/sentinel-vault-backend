@@ -16,6 +16,8 @@
         <link rel="prev" href="../threat_model/">
       
       
+        <link rel="next" href="../refactoring_journal/">
+      
       
         
       
@@ -72,6 +74,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#testing-logs" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -433,6 +440,26 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Test Suite
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -451,6 +478,81 @@
 
       </a>
       
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#fix-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fix Logs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fix Logs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../refactoring_journal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Refactoring Journal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -480,6 +582,44 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#fix-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fix Logs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fix Logs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -496,9 +636,695 @@
 
 
 
-  <h1>Test Suite</h1>
+<style>
+    .non-threat {
+        color: grey
+    }
 
+    .low {
+    color: green
+    }
 
+    .medium {
+    color: orange
+    }
+
+    .high {
+    color: red
+    }
+
+    .critical {
+    color: rgb(163, 0, 0)
+    }
+</style>
+
+<h1 id="testing-logs">Testing Logs</h1>
+<table>
+<thead>
+<tr>
+<th>Test #</th>
+<th>Date</th>
+<th>Description / Module</th>
+<th>Expected Result</th>
+<th>Actual Result</th>
+<th>Outcome</th>
+<th>Test File (if applicable)</th>
+<th>Commit link</th>
+<th>Bug/fix reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td></td>
+<td>FastAPI setup with root app information and health check endpoint (main)</td>
+<td>Both endpoints return <code>200 OK</code> and response body.</td>
+<td>Both endpoints return 200 OK and response body.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td>SQLalchemyORM database setup (database)</td>
+<td>Executing health check's route logic must return <code>200 OK</code> and <code>sentinel-vault.db</code> must be created.</td>
+<td>Error while creating database (500 Internal Server Error), the database was configured and created properly, but was not connected to FastAPI.</td>
+<td>Fail</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td>SQLalchemyORM database setup (database)</td>
+<td>Executing health check's route logic must return <code>200 OK</code> and <code>sentinel-vault.db</code> must be created.</td>
+<td>Executing health check's route logic returned 200 OK and sentinel-vault.db was created.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td></td>
+<td>Virtual environment setup for passwordlib and dependency isolation (security)</td>
+<td>Git bash CLI must return (venv) indicating the virtual enviroment is created</td>
+<td>Git bash CLI returned (venv) indicating the virtual enviroment is created</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td></td>
+<td>Password hashing helper module (security)</td>
+<td>Entering a plaintext password through the module must hash including the salt $argon2id$.</td>
+<td>Entering a plaintext password through the module heshes including the salt $argon2id$.</td>
+<td>Pass</td>
+<td>simple_hashing_test.py</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td></td>
+<td>Password verification function (security)</td>
+<td>Entering the same plaintext password through verification must return True, and incorrect/mistmatching return False.</td>
+<td>Entering the same plaintext password through verification  returns True, and incorrect/mistmatching returns False.</td>
+<td>Pass</td>
+<td>simple_hashing_test.py</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td></td>
+<td>Stateless authentication &amp; JWT signing - creating a token (security)</td>
+<td>Created and signed token must be returned in a token format hiding containing claims, secret key and algorithm using the test file: <code>simple_jwt_test.py</code></td>
+<td>Created and signed token returned a token format hiding containing claims, secret key and algorithm using the test file: simple_jwt_test.py</td>
+<td>Pass</td>
+<td>simple_jwt_test.py</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td></td>
+<td>Stateless authentication &amp; JWT signing - decoding a token (security)</td>
+<td>Decoded token must return a JSON response body containing user claims and expiry using the secret key and algorithm.</td>
+<td>Decoded token did not return a JSON response body containing user claims and expiry using the secret key and algorithm, returned None.</td>
+<td>Fail</td>
+<td>simple_jwt_test.py</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td></td>
+<td>Stateless authentication &amp; JWT signing - decoding a token (security)</td>
+<td>Decoded token must return a JSON response body containing user claims and expiry using the secret key and algorithm.</td>
+<td>Decoded token did return a JSON response body containing user claims and expiry using the secret key and algorithm.</td>
+<td>Pass</td>
+<td>simple_jwt_test.py</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td></td>
+<td>Stateless authentication &amp; JWT signing - handling a tampered token (security)</td>
+<td>Decoded tampered token must return None and error <code>401 Unauthorised</code>.</td>
+<td>Decoded tampered token did return None and error 401 unauthorised.</td>
+<td>Pass</td>
+<td>simple_jwt_test.py</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td></td>
+<td>Registration endpoint setup - Creating user's record (main)</td>
+<td>Must return <code>201 Created</code> with a new record containing the <code>values, id, username, email, hashed_password</code> and <code>role</code> where role's default value is <code>"Viewer"</code>, and their values matched entered information.</td>
+<td>Returned 201 Created with a new record containing the values, id, username, email, hashed_password and role where role's default value is "Viewer", and their values matched entered information.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td></td>
+<td>Login endpoint setup (main)</td>
+<td>Must return <code>401 Unauthorised</code> if username or password is incorrect, and <code>200 OK</code> if both is a database match.</td>
+<td>Returned 401 Unauthorised if username or password is incorrect, and 200 OK if both is a database match.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>13</td>
+<td></td>
+<td>Registration endpoint setup - Password hashing verification (main)</td>
+<td>Upon registration, must return <code>201 Created</code>, with their hashed_password in a hashed format and salt <code>$argon2id$</code></td>
+<td>Upon registration, returned 201 Created, with their hashed_password in a hashed format and salt $argon2id$</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>14</td>
+<td></td>
+<td>Login endpoint setup - Token signing &amp; attachment (main)</td>
+<td>User must be granted a token that lasts 30 minutes (expiry), with their tokenised string.</td>
+<td>User is granted a token that lasts 30 minutes (expiry), with their tokenised string.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>15</td>
+<td></td>
+<td>Login endpoint setup - Token expiry test (main)</td>
+<td><code>401 Unauthorised</code> must be returned if their token has been active for more than 30 minutes.</td>
+<td>401 Unauthorised was returned if their token has been active for more than 30 minutes.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>16</td>
+<td></td>
+<td>Login endpoint setup - Mismatched or tampered token (main)</td>
+<td><code>401 Unauthorised</code> if their token has been tampered with or mismatched.</td>
+<td>401 Unauthorised was returned as expected.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>17</td>
+<td></td>
+<td>Login &amp; Session cookie creation (main)</td>
+<td>Created cookie shows on the network tab named <code>"access_token"</code> and JWT token. Must be HTTP only and <code>same_site="lax"</code></td>
+<td>Created cookie shows on the network tab named "access_token" and JWT token. Is HTTP only and same_site="lax" as expected.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>18</td>
+<td></td>
+<td>Login &amp; Session cookie authentication module (security)</td>
+<td>Returns error 401 Unauthorised if cookie is not valid, or user is not authenticated. (no cookie present)</td>
+<td>Returned error 401 Unauthorised if cookie is not valid, or user is not authenticated as expected. (no cookie present)</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>19</td>
+<td></td>
+<td>Create protected endpoint placeholders - System Reset (main)</td>
+<td>Returns JSON response body <code>{"message": "System reset successful"}</code> if logged in user has allowed role: <code>"Admin"</code>.</td>
+<td>Returned JSON response body {"message": "System reset successful"} if logged in user has allowed role: "Admin".</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>20</td>
+<td></td>
+<td>Create protected endpoint placeholders - System Reset RBAC Test (main)</td>
+<td>Returns <code>403 Forbidden</code> if user does not have allowed role: <code>"Admin"</code>.</td>
+<td>Returned JSON response body {"message": "System reset successful"}.</td>
+<td>Fail</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>21</td>
+<td></td>
+<td>Create protected endpoint placeholders - System Reset RBAC Test (main)</td>
+<td>Returns <code>403 Forbidden</code> if user does not have allowed role: <code>"Admin"</code>.</td>
+<td>Returned 403 Forbidden if user does not have allowed role: "Admin".</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>22</td>
+<td></td>
+<td>Verify that the refactored security module retains functional parity with legacy security module (security)</td>
+<td>Executing endpoints (register, login) with functions from the refactored security module will function as normal.</td>
+<td>Executed endpoints (register, login) with functions and encountered 500 Internal Server Error due to incorrect arguments using the joserfc encoding and decoding function.</td>
+<td>Fail</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>23</td>
+<td></td>
+<td>Verify that the refactored security module retains functional parity with legacy security module (security)</td>
+<td>Executing endpoints (register, login) with functions from the refactored security module will function as normal.</td>
+<td>Executed endpoints (register, login) with functions from the refactored security module functions as normal.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>24</td>
+<td></td>
+<td>Audit logging system setup &amp; api/telemetry/logs endpoint (security)</td>
+<td>Upon running <code>api/telemetry/logs</code> endpoint, it must return an empty JSON response body.</td>
+<td>Upon running api/telemetry/logs endpoint, it returned an empty JSON response body.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>25</td>
+<td></td>
+<td>Audit logging system setup - protecting endpoint using RBAC (security)</td>
+<td>Protected endpoint must only allow users with roles Analyst and Admin with <code>200 OK</code></td>
+<td>Protected endpoint only allows users with roles Analyst and Admin with 200 OK</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>26</td>
+<td></td>
+<td>Audit logging system setup - restricting unauthorised users (security)</td>
+<td>Protected endpoint must return <code>403 Forbidden</code> if a Viewer attempts to view them.</td>
+<td>Protected endpoint returned 403 Forbidden if a Viewer attempts to view them.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>27</td>
+<td></td>
+<td>Rate limiting system setup - Protecting endpoints from brute-force (main)</td>
+<td>Rate limited endpoints return <code>200 OK</code>/<code>201 Created</code> if less than 5 requests were made in a minute.</td>
+<td>Rate limited endpoints returns 200 OK/201 Created if less than 5 requests were made in a minute as expected.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>28</td>
+<td></td>
+<td>Rate limiting system setup - Limit testing (main)</td>
+<td>Rate limited endpoints return <code>429 Too Many Requests</code> and blocks the user's connection if exceeds 5 requests per minute.</td>
+<td>Rate limited endpoints returned 429 Too Many Requests and blocks the user's connection if exceeds 5 requests per minute as expected.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>29</td>
+<td></td>
+<td>HTTP security headers middleware setup - (main)</td>
+<td>Specified headers must display in every response header of each endpoint.</td>
+<td>Specified headers display in every response header of each endpoint.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>30</td>
+<td></td>
+<td>Telemetry log submission module (main)</td>
+<td>Entry must be saved in the database with specified <code>values, device_id, cpu_usage, memory_usage</code> and status default to <code>"NORMAL"</code>.</td>
+<td>Entry was saved in the database with specified values, device_id, cpu_usage, memory_usage and status default to "NORMAL" as expected</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>31</td>
+<td></td>
+<td>Data validation sub-module: Valid data (main)</td>
+<td>Each data validation constraint must be passed and run the route logic.</td>
+<td>Each data validation constraint has passed route logic has been ran.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>32</td>
+<td></td>
+<td>Data validation sub-module: Extreme data (main)</td>
+<td>Each data validation constraint must be passed and run the route logic.</td>
+<td>Each data validation constraint has passed route logic has been ran.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>33</td>
+<td></td>
+<td>Data validation sub-module: Invalid data (main)</td>
+<td>The server must return <code>422 Unprocessable Entity</code> due to a data validation rule violation.</td>
+<td>The server returns 422 Unprocessable Entity due to a data validation rule violation.</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>34</td>
+<td></td>
+<td>Telemetry pagination module setup (main)</td>
+<td>Server returns a filtered JSON response body from the database with a limit of 10 logs in one response (example) and an offset of 2 (starts 2 logs later)</td>
+<td>Server returned a filtered JSON response body from the database with a limit of 10 logs in one response (example) and an offset of 2 (starts 2 logs later)</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>35</td>
+<td></td>
+<td>Anomaly detection module setup (main)</td>
+<td>Extreme data values when submitting a log must trigger logging system with the alert <code>"CRITICAL_ANOMALY"</code></td>
+<td>Extreme data values when submitting a log triggered logging system with the alert "CRITICAL_ANOMALY"</td>
+<td>Pass</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>36</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>37</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>38</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>39</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>40</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>41</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>42</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>43</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>44</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>45</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>46</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>47</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>48</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>49</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>50</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>51</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="fix-logs">Fix Logs</h2>
+<p><strong>All failures go here.</strong></p>
+<h3 id="key">Key<br></h3>
+<p><strong>Catastrophic Failure</strong>: Multiple bugs within the program causes it to fail.<br><strong>Failure</strong>: A bug within the program causes it to fail.<br><strong>Threat</strong>: A block of code, package used or module poses a serious security risk.<br><strong>Vulnerability</strong>: A block of code, package used or module poses a medium or lower security risk.<br><strong>Risk</strong>: Any other non-security risk that involves bad practise or impacts software quality negatively.<br></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Problem</th>
+<th style="text-align: left;">Date &amp; Time</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>1</strong></td>
+<td style="text-align: left;">20/08/26<br>18:33</td>
+<td style="text-align: left;"><strong>Failure (Human Error):</strong> Attempted to run the server using <code>uvicorn main:app</code> –reload returns a command not found error as it was not in the correct directory to find the package and command <code>uvicorn</code>.</td>
+<td style="text-align: left;">Added <code>python -m</code> in the beginning in order to locate the module and execute it as a main code.<br><br><strong>Later fix (29/08):</strong><br><em>cd src -&gt; uvicorn main:app --reload</em></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>2</strong></td>
+<td style="text-align: left;">21/08/26<br>17:02</td>
+<td style="text-align: left;"><strong>Failure (Hallucination/Human Error):</strong> Attempted to import base class and session maker functionality from a deprecated module <code>sqlalchemy.ext.declarative</code>. This took place because I accidentally accepted an auto-suggesstion from Cursor's built-in agent.</td>
+<td style="text-align: left;">Feature was deprecated, replaced imported module with new module, <code>sqlalchemy.orm</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>3</strong></td>
+<td style="text-align: left;">23/08/26 –<br>25/08/26<br>22:42</td>
+<td style="text-align: left;"><strong>Risk (Scope creep):</strong> Attempted to implement JWT stateless authentication with AWS KMS, which is an enterprise-level scope, and is outside my current ability.</td>
+<td style="text-align: left;">Manually programmed locally handled JWT token management and locking it into a HTTP-only cookie.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>4</strong></td>
+<td style="text-align: left;">28/08/26<br>14:01</td>
+<td style="text-align: left;"><strong>Risk (Human Error):</strong> Coded endpoints such as the login and register endpoint without documenting potential errors inside the endpoint metadata (<code>api/login</code>, <code>api/register</code>)<br><br><em>Issue raised by SonarQube Cloud – AI agent code verifier</em><br><br>This is a high risk, as any consumers or developers using the API will find it unreliable due to undocumented errors.</td>
+<td style="text-align: left;">Manually programmed both endpoints to have errors documented, including the error description and expected content (response body).</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>5</strong></td>
+<td style="text-align: left;">29/08/26<br>12:35</td>
+<td style="text-align: left;"><strong>Threat (Miss):</strong> Only implemented rate limiting to the login endpoint, which allows attackers to target unprotected endpoints to carry out DDoS and DoS attacks. Rate-limits should be applied to all endpoints, but not the exact same rate limit.</td>
+<td style="text-align: left;">Applied different rate limits to endpoints<br>Dashboard + Profile: 10/min<br>Metrics: 7/min<br>Logs: 5/min<br><strong>Later fix (31/08)</strong>: Added a global rate-limit to all endpoints and specified tighter rate-limits to security-sensitive and resource heavy endpoints.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>6</strong></td>
+<td style="text-align: left;"><span style="color:red">Unresolved<span></td>
+<td style="text-align: left;"><strong>Threat (Miss):</strong> Gemini could have provided a tip for good practise when assigning HTTP-only cookies, to have “secure=True” to only allow cookies through a secure TLS connection.</td>
+<td style="text-align: left;">No fix yet.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>7</strong></td>
+<td style="text-align: left;">01/09/2026 22:25</td>
+<td style="text-align: left;"><strong>Failure (Human Error)</strong>: Attempted to use a class “Field” for telemetry pagination function from a package that was not imported.</td>
+<td style="text-align: left;">Imported the class <code>Field</code> from Pydantic.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>8</strong></td>
+<td style="text-align: left;">09/09/2026 18:18</td>
+<td style="text-align: left;"><strong>Failure (Human Error):</strong> Did not setup the connection thread between FastAPI and the configured database.</td>
+<td style="text-align: left;">Correctly configured the connection thread between FastAPI and the configured database, binding it to the session engine.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>9</strong></td>
+<td style="text-align: left;">09/09/2026 22:34</td>
+<td style="text-align: left;"><strong>Failure (Human Error):</strong> Used incorrect paramaters/arguements for <code>josertc</code> encoding and decoding function while trying to refactor JWT signing module and replacing deprecated package, <code>python-jose</code>.</td>
+<td style="text-align: left;"><code>josertc</code> has paramaters <code>(claims, secret key, algorithm)</code> with the additional claims validation instead of <code>python-jose</code>'s <code>(payload, key, algorithm)</code> without claims validation.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>10</strong></td>
+<td style="text-align: left;">10/09/2026 22:34</td>
+<td style="text-align: left;"><strong>Failure (Human Error):</strong> Dependency function <code>RoleChecker</code> (now known as <code>allow_roles</code>) iterated indefinitely due to FastAPI's handling of dependency functions from classes. This was due to an improperly refactored <code>RoleChecker</code> dependency function, where there was another dependency <code>get_current_user</code>.</td>
+<td style="text-align: left;">Changed <code>RoleChecker</code> to <code>allow_roles</code> and changed it from an object to a function so that FastAPI doesn't indefinitely iterate through the objects.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>11</strong></td>
+<td style="text-align: left;">01/09/2026 22:34</td>
+<td style="text-align: left;"><strong>Failure (Human Error):</strong> Attempted to use Pydantic’s <code>Field()</code> for validation types and field arguments rather than FastAPI’s <code>Query()</code>.</td>
+<td style="text-align: left;">Used <code>Annotated[]</code> and <code>Query()</code> for FastAPI to understand validation types and field arguments.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>12</strong></td>
+<td style="text-align: left;">01/09/2026 22:34</td>
+<td style="text-align: left;"><strong>Failure (Human Error):</strong> Attempted to use Pydantic’s <code>Field()</code> for validation types and field arguments rather than FastAPI’s <code>Query()</code>.</td>
+<td style="text-align: left;">Used <code>Annotated[]</code> and <code>Query()</code> for FastAPI to understand validation types and field arguments.</td>
+</tr>
+</tbody>
+</table>
 
 
 

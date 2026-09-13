@@ -13,24 +13,26 @@
       
       
       
+        <link rel="prev" href="../test_logs/">
+      
       
       
         
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Refactoring journal - SentinelVault Documentation</title>
+        <title>Refactoring Journal - SentinelVault Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -49,7 +51,7 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -71,6 +73,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#refactor-journal" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -83,7 +90,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="SentinelVault Documentation" class="md-header__button md-logo" aria-label="SentinelVault Documentation" data-md-component="logo">
+    <a href="../.." title="SentinelVault Documentation" class="md-header__button md-logo" aria-label="SentinelVault Documentation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -103,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Refactoring journal
+              Refactoring Journal
             
           </span>
         </div>
@@ -181,7 +188,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="SentinelVault Documentation" class="md-nav__button md-logo" aria-label="SentinelVault Documentation" data-md-component="logo">
+    <a href="../.." title="SentinelVault Documentation" class="md-nav__button md-logo" aria-label="SentinelVault Documentation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -199,7 +206,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs/index.md" class="md-nav__link">
+      <a href="../../docs/index.md" class="md-nav__link">
         
   
   
@@ -280,7 +287,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../architecture/token_signing/" class="md-nav__link">
+      <a href="../../architecture/token_signing/" class="md-nav__link">
         
   
   
@@ -308,7 +315,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../architecture/database/" class="md-nav__link">
+      <a href="../../architecture/database/" class="md-nav__link">
         
   
   
@@ -340,8 +347,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -352,13 +361,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -379,7 +386,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -397,7 +404,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../security/threat_model/" class="md-nav__link">
+      <a href="../threat_model/" class="md-nav__link">
         
   
   
@@ -425,7 +432,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../security/test_logs/" class="md-nav__link">
+      <a href="../test_logs/" class="md-nav__link">
         
   
   
@@ -441,6 +448,133 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Refactoring Journal
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Refactoring Journal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#refactor-journal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Refactor Journal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Refactor Journal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reasons-for-refactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reasons for refactor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#severity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Severity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -471,6 +605,70 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#refactor-journal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Refactor Journal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Refactor Journal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reasons-for-refactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reasons for refactor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#severity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Severity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -486,9 +684,55 @@
 
 
 
-  <h1>Refactoring journal</h1>
+  <h1>Refactoring Journal</h1>
 
+<style>
+    .non-threat {
+        color: grey
+    }
 
+    .low {
+    color: green
+    }
+
+    .medium {
+    color: orange
+    }
+
+    .high {
+    color: red
+    }
+
+    .critical {
+    color: rgb(163, 0, 0)
+    }
+</style>
+
+<h2 id="refactor-journal">Refactor Journal</h2>
+<p><strong>Refactoring logs only contain threats, vulnerabilities and risks that were present due to AI's mistakes.</strong></p>
+<h3 id="key">Key</h3>
+<h4 id="reasons-for-refactor">Reasons for refactor</h4>
+<p><strong>Threat</strong>: A block of code, package used or module poses a serious security risk.<br><strong>Vulnerability</strong>: A block of code, package used or module poses a medium or lower security risk.<br><strong>Risk</strong>: Any other non-security risk that involves bad practise or impacts software quality negatively.<br></p>
+<h4 id="severity">Severity</h4>
+<p><span class="non-threat"><strong>Non-threat</strong></span><br><span class="low"><strong>Low</strong></span><br><span class="medium"><strong>Medium</strong></span><br><span class="high"><strong>High</strong></span><br><span class="critical"><strong>Critical</strong></span></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Issue</th>
+<th style="text-align: left;">Date &amp; Time</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Refactor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>1</strong></td>
+<td style="text-align: left;">05/09/26<br>18:33</td>
+<td style="text-align: left;"><span class="critical"><strong>Threat (Critical)</strong></span>: Gemini used two outdated packages which are abandoned (<code>passlib.context</code>,<code>python-jose</code>) in the module <code>security.py</code>, this can result in severe security vulnerabilities, as security keys can easily obtained or cracked, as <code>python-jose</code> stores the secret key internally using a raw string. Additionally, <code>passlib.context</code> is an abandoned package that has not received a stable release, leading to runtime errors and outdated security measures.</td>
+<td style="text-align: left;">Refactored code logic to use <code>joserfc</code>, a newer and more modern package that handles secret keys more securely by never storing them as a raw-string, it must be imported as a mathematically verified JWK object (JSON Web Key) before any cryptographic actions are performed. Used <code>pwdlib</code> instead of <code>passlib.context</code> as it recieves regular updates and poses minimal security risks.</td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -538,10 +782,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.expand", "navigation.sections", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.expand", "navigation.sections", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
