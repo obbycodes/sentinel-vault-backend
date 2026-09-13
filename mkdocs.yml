@@ -1,7 +1,7 @@
 site_name: SentinelVault Documentation
 site_description: Security architecture, threat modeling, and implementation logs.
 site_author: Your Name
-docs_dir: sentinel-vault-backend/docs
+docs_dir: docs
 
 theme:
   name: material
@@ -30,3 +30,4 @@ nav:
   - Security & Testing:
       - Threat Model: security/threat_model.md
       - Test Suite: security/test_logs.md
+      - Refactoring Journal: security/refactoring_journal.md
