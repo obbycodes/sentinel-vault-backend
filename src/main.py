@@ -70,15 +70,13 @@ def health_check(db: DbSession):
     return {
         "status": "System is at a healthy state.",
         "database_status": "Connected",
-        "timestamp": datetime.now().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
     }
 
 
 @app.post("/api/register", status_code=201)
 @limiter.limit("5/minute")
-def register_user(
-    request: Request, user_data: UserCreate, db: DbSession
-):
+def register_user(request: Request, user_data: UserCreate, db: DbSession):
     existing_user = (
         db.query(models.User).filter(models.User.username == user_data.username).first()
     )
