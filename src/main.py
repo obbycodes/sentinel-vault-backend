@@ -1,10 +1,12 @@
 from datetime import datetime, timezone
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
+from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response, status
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
+from sqlalchemy import func
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
 import models
@@ -23,7 +25,7 @@ from security import (
 app = FastAPI(
     title="SentinelVault",
     description="Asset Management and Telemetry System",
-    version="0.1.0",
+    version="0.3.0",
 )
 
 DbSession = Annotated[Session, Depends(get_db)]
@@ -61,17 +63,22 @@ def root_info():
     return {
         "app_name": "SentinelVault",
         "app_description": "Asset Management and Telemetry System",
-        "app_version": "0.1.0",
+        "app_version": "0.3.0",
     }
 
 
 @app.get("/health")
-def health_check(db: DbSession):
-    return {
-        "status": "System is at a healthy state.",
-        "database_status": "Connected",
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-    }
+def health_check(response: Response, db: DbSession):
+    try:
+        db.execute("SELECT 1")
+        return {
+            "status": "System is at a healthy state.",
+            "database_status": "Connected",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+    except OperationalError:
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+        return {"status": "degraded", "database_status": "Disconnected"}
 
 
 @app.post("/api/register", status_code=201)
