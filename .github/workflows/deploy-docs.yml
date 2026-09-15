@@ -23,7 +23,6 @@ jobs:
           # Fetch full history so gh-deploy can reference branches and safely push changes
           fetch-depth: 0 
 
-<<<<<<< HEAD
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -32,20 +31,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip --only-binary :all:
-          pip install --only-binary :all: mkdocs-material==9.7.7
+          python -m pip install --upgrade pip 
+          pip install mkdocs-material==9.7.7
 
       - name: Configure Git Bot Identity
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-=======
-      - name: Install mkdocs-material
-
-        run: | 
-          apt install python3-xyz
-          uv pip install mkdocs-material --system --only-binary :all:
->>>>>>> 53e269bd22a27fb97823498e663c78978a9e0ac5
 
       - name: Deploy to GitHub Pages
         run: mkdocs gh-deploy --force
