@@ -234,3 +234,34 @@ def telemetry_query(
     )
 
     return records
+
+
+@app.get("/api/telemetry/stats")
+def get_telemetry_stats(db: DbSession, current_user: AuthenticatedUser):
+    total_records = db.query(func.count(models.DeviceTelemetryLog.id)).scalar() or 0
+    total_devices = (
+        db.query(
+            func.count(func.distinct(models.DeviceTelemetryLog.device_id))
+        ).scalar()
+        or 0
+    )
+    avg_cpu = db.query(func.avg(models.DeviceTelemetryLog.cpu_usage)).scalar() or 0
+    avg_memory = (
+        db.query(func.avg(models.DeviceTelemetryLog.memory_usage)).scalar() or 0
+    )
+    anomaly_count = (
+        db.query(
+            func.count(models.DeviceTelemetryLog.id).filter(
+                models.DeviceTelemetryLog == "CRITICAL"
+            )
+        ).scalar()
+        or 0
+    )
+
+    return {
+        "total_records": total_records,
+        "total_devices": total_devices,
+        "avg_cpu_usage": avg_cpu,
+        "avg_ram_usage": avg_memory,
+        "anomalies": anomaly_count,
+    }

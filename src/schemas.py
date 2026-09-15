@@ -31,10 +31,18 @@ class DeviceTelemetryResponse(BaseModel):
     status: str
     timestamp: datetime
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
 
 
 class UserChange(BaseModel):
     username: str
     new_role: str
+
+
+class TelemetryStatsResponse(BaseModel):
+    total_records: int
+    average_cpu_usage: int
+    average_ram_usage: int
+    total_anomalies: int
+    total_devices: int
