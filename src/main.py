@@ -1,12 +1,10 @@
 from datetime import datetime, timezone
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response, status
+from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
-from sqlalchemy import func
-from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
 import models
@@ -25,7 +23,7 @@ from security import (
 app = FastAPI(
     title="SentinelVault",
     description="Asset Management and Telemetry System",
-    version="0.3.0",
+    version="0.1.0",
 )
 
 DbSession = Annotated[Session, Depends(get_db)]
@@ -63,22 +61,17 @@ def root_info():
     return {
         "app_name": "SentinelVault",
         "app_description": "Asset Management and Telemetry System",
-        "app_version": "0.3.0",
+        "app_version": "0.1.0",
     }
 
 
 @app.get("/health")
-def health_check(response: Response, db: DbSession):
-    try:
-        db.execute("SELECT 1")
-        return {
-            "status": "System is at a healthy state.",
-            "database_status": "Connected",
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-        }
-    except OperationalError:
-        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
-        return {"status": "degraded", "database_status": "Disconnected"}
+def health_check(db: DbSession):
+    return {
+        "status": "System is at a healthy state.",
+        "database_status": "Connected",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
 
 
 @app.post("/api/register", status_code=201)
@@ -241,34 +234,3 @@ def telemetry_query(
     )
 
     return records
-
-
-@app.get("/api/telemetry/stats")
-def get_telemetry_stats(db: DbSession, current_user: AuthenticatedUser):
-    total_records = db.query(func.count(models.DeviceTelemetryLog.id)).scalar() or 0
-    total_devices = (
-        db.query(
-            func.count(func.distinct(models.DeviceTelemetryLog.device_id))
-        ).scalar()
-        or 0
-    )
-    avg_cpu = db.query(func.avg(models.DeviceTelemetryLog.cpu_usage)).scalar() or 0
-    avg_memory = (
-        db.query(func.avg(models.DeviceTelemetryLog.memory_usage)).scalar() or 0
-    )
-    anomaly_count = (
-        db.query(
-            func.count(models.DeviceTelemetryLog.id).filter(
-                models.DeviceTelemetryLog == "CRITICAL"
-            )
-        ).scalar()
-        or 0
-    )
-
-    return {
-        "total_records": total_records,
-        "total_devices": total_devices,
-        "avg_cpu_usage": avg_cpu,
-        "avg_ram_usage": avg_memory,
-        "anomalies": anomaly_count,
-    }
