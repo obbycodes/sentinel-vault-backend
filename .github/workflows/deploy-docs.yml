@@ -23,6 +23,7 @@ jobs:
       - name: Install mkdocs-material
 
         run: | 
+          apt install python3-xyz
           uv pip install mkdocs-material --system --only-binary :all:
 
       - name: Deploy to GitHub Pages
