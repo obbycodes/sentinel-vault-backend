@@ -1061,55 +1061,55 @@
 </tr>
 <tr>
 <td>36</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>14/09/2026 21:43</td>
+<td>Telemetry aggregation &amp; analytics dashboard module (main)</td>
+<td>Route must return number of devices and anomalies, including average CPU and RAM usage in a JSON response body.</td>
+<td>Route returned number of devices and anomalies, including average CPU and RAM usage in a JSON response body as expected.</td>
+<td>Pass</td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>37</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>14/09/2026 22:26</td>
+<td>Pytest Execution Pipeline module (test_auth)</td>
+<td>Pytest CLI should return 2 passed tests within the <code>test_auth</code> module.</td>
+<td>Error: <code>httpx2</code> must be installed to run pytest on <code>test_auth.py</code></td>
+<td>Fail</td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>38</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>14/09/2026 22:33</td>
+<td>Pytest Execution Pipeline module (test_auth)</td>
+<td>Pytest CLI should return 2 passed tests within the <code>test_auth</code> module.</td>
+<td>Error: <code>ModuleNotFoundError</code>, database could not be imported.</td>
+<td>Fail</td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>39</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>14/09/2026 22:51</td>
+<td>Pytest Execution Pipeline module (test_auth)</td>
+<td>Pytest CLI should return 2 passed tests within the <code>test_auth</code> module.</td>
+<td>Error: <code>OperationalError</code>, <code>sqlalchemy</code> could not find table <code>users</code>. (x2)</td>
+<td>Fail</td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>40</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>14/09/2026 23:27</td>
+<td>Pytest Execution Pipeline module (test_auth)</td>
+<td>Pytest CLI should return 2 passed tests within the <code>test_auth</code> module.</td>
+<td>Pytest CLI returned 2 passed tests within the <code>test_auth</code> module as expected.</td>
+<td>Pass</td>
 <td></td>
 <td></td>
 <td></td>
@@ -1284,7 +1284,7 @@
 <tr>
 <td style="text-align: center;"><strong>6</strong></td>
 <td style="text-align: left;"><span style="color:red">Unresolved<span></td>
-<td style="text-align: left;"><strong>Threat (Miss):</strong> Gemini could have provided a tip for good practise when assigning HTTP-only cookies, to have “secure=True” to only allow cookies through a secure TLS connection.</td>
+<td style="text-align: left;"><strong>Threat (Miss):</strong> Did not account for HTTPS when assigning HTTP-only cookies, it must have “secure=True” to only allow cookies through a secure TLS connection.</td>
 <td style="text-align: left;">No fix yet.</td>
 </tr>
 <tr>
@@ -1319,9 +1319,27 @@
 </tr>
 <tr>
 <td style="text-align: center;"><strong>12</strong></td>
-<td style="text-align: left;">01/09/2026 22:34</td>
-<td style="text-align: left;"><strong>Failure (Human Error):</strong> Attempted to use Pydantic’s <code>Field()</code> for validation types and field arguments rather than FastAPI’s <code>Query()</code>.</td>
-<td style="text-align: left;">Used <code>Annotated[]</code> and <code>Query()</code> for FastAPI to understand validation types and field arguments.</td>
+<td style="text-align: left;">14/09/2026 22:26</td>
+<td style="text-align: left;"><strong>Failure (Human Error):</strong> <code>httpx2</code> must be installed to run pytest on <code>test_auth</code>. Attempted to run <code>pytest</code> without it.</td>
+<td style="text-align: left;">Installed required package <code>httpx2</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>13</strong></td>
+<td style="text-align: left;">14/09/2026 22:33</td>
+<td style="text-align: left;"><strong>Failure (Human Error):</strong> <code>ModuleNotFoundError</code>, database could not be found because the test database setup was configured incorrectly.</td>
+<td style="text-align: left;">Imported <code>Base</code> from <code>sqlalchemy</code> and adjusted code syntax to properly configure the database.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>14</strong></td>
+<td style="text-align: left;">14/09/2026 22:51</td>
+<td style="text-align: left;"><strong>Failure (Human Error):</strong> <code>OperationalError</code>, <code>sqlalchemy</code> could not find table <code>users</code>.</td>
+<td style="text-align: left;">The wrong <code>Base</code> class was imported, since it was imported from <code>sqlalchemy</code> instead of <code>database</code> module, it created a clean, new database template, imported <code>Base</code> from <code>database</code> module instead, additionally, imported <code>models</code> module so that <code>sqlalchemy</code> could potentially detect it.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>15</strong></td>
+<td style="text-align: left;">14/09/2026 22:52</td>
+<td style="text-align: left;"><strong>Failure (Human Error):</strong> <code>OperationalError</code>, <code>sqlalchemy</code> could not find table <code>users</code>. (<strong>x2</strong>)</td>
+<td style="text-align: left;"><code>sqlalchemy</code> by default setup a new connection thread to a new and refreshed database that was later created. Fixed this by forcing <code>sqlalchemy</code> to connect all threads to the same database using <code>StaticPool</code>.</td>
 </tr>
 </tbody>
 </table>
