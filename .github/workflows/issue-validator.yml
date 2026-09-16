@@ -36,11 +36,11 @@ jobs:
                 isInvalid = true;
                 invalidReason = "Please provide detailed steps to reproduce the bug so we can investigate.";
               }
-            } else if (body.includes("### Desired Behavior") || body.includes("[Feature Request]")) {
+            } else if (body.includes("### Expected vs. Actual Behavior") || body.includes("[Feature Request]")) {
               labelsToAdd.push("feature");
               
               // Validation rule: Ensure the feature description isn't blank
-              const featureSection = body.split("### Problem Description")[1] || "";
+              const featureSection = body.split("### Is your feature request related to a problem?")[1] || "";
               if (featureSection.trim().length < 15) {
                 isInvalid = true;
                 invalidReason = "Please describe the problem your feature request is trying to solve.";
