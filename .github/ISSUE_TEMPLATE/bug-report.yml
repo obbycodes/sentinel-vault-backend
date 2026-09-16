@@ -1,0 +1,48 @@
+name: "🐛 Bug Report"
+description: File a structured report to help us fix an issue.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill out this form accurately to help us reproduce and fix the bug.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Provide a clear and concise summary of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Tell us exactly how to recreate the bug. Numbered steps are best.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected vs. Actual Behavior
+      description: What did you expect to happen, and what actually happened instead?
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment Info
+      description: e.g., Node.js v20, React 19, Chrome 140, Windows 11
+    validations:
+      required: true
+  - type: textarea
+    id: visual-evidence
+    attributes:
+      label: Logs or Screenshots
+      description: Paste stack traces or drag-and-drop screenshots here.
+    validations:
+      required: false
