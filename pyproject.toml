@@ -1,0 +1,14 @@
+[tool.ruff]
+# Target Python version
+target-version = "py310"
+# Line length configuration (matches Black's default)
+line-length = 88
+
+[tool.ruff.lint]
+# Enable Pyflakes (F), Pycodestyle (E, W), and Isort (I) for organized imports
+select = ["E", "F", "W", "I"]
+ignore = []
+
+[tool.bandit]
+exclude_dirs = ["tests", "venv", ".venv"]
+tests = ["B201", "B301"] # Or leave empty to run all default security checks
