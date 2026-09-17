@@ -31,4 +31,4 @@ jobs:
       run: ruff check .
 
     - name: Run Bandit Security Scanner
-      run: bandit -r . -c pyproject.toml
+      run: python -m bandit -r . -c pyproject.toml
