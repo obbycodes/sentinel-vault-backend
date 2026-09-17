@@ -1,3 +1,6 @@
+# Disclaimer
+> To demonstrate how I operate within an agile development team, reviews below simulates cross-functional collaboration and code reviews for the SentinelVault ecosystem.
+---
 ## Overview
 <!-- Brief summary of what this PR introduces and why. -->
 - **Linked Issue:** Fixes #
@@ -25,8 +28,8 @@
 
 ---
 
-## STRIDE Security Analysis
-*A self-review of threat modeling conducted on these changes:*
+## OWASP Security Analysis
+*A self-review of threat modelling conducted on these changes:*
 
 | Threat Category | Potential Risk Identified | Mitigation Strategy Applied |
 | :--- | :--- | :--- |
@@ -39,6 +42,9 @@
 
 ---
 
-## Final AI & Peer Review Notes
-- **AI Verification Feedback:** 
-- **Self-Review Insights:** *(What did you change or learn right before clicking merge?)*
+## Self-Review Notes
+---
+## AI Review Notes
+---
+## False-Positive Verification
+> Verifying any hallucinations, false positives and missed information.
