@@ -1,0 +1,86 @@
+# .github/workflows/issue-validator.yml
+name: Issue Labeler and Validator
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  validate-and-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Validate Issue and Assign Labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const body = issue.body || "";
+            const labelsToAdd = [];
+            let isInvalid = false;
+            let invalidReason = "";
+
+            // 1. DETERMINE TYPE & AUTO-LABEL
+            // This assumes issue forms contain specific string identifiers
+            if (body.includes("### Steps to Reproduce") || body.includes("[Bug Report]")) {
+              labelsToAdd.push("bug");
+              
+              // Validation rule: Check if they left the reproduction steps empty or too short
+              const reproSection = body.split("### Steps to Reproduce")[1] || "";
+              if (reproSection.trim().length < 20) {
+                isInvalid = true;
+                invalidReason = "Please provide detailed steps to reproduce the bug so we can investigate.";
+              }
+            } else if (body.includes("### Expected vs. Actual Behavior") || body.includes("[Feature Request]")) {
+              labelsToAdd.push("feature");
+              
+              // Validation rule: Ensure the feature description isn't blank
+              const featureSection = body.split("### Is your feature request related to a problem?")[1] || "";
+              if (featureSection.trim().length < 15) {
+                isInvalid = true;
+                invalidReason = "Please describe the problem your feature request is trying to solve.";
+              }
+            }
+
+            // 2. APPLY LABELS
+            if (labelsToAdd.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: labelsToAdd
+              });
+            }
+
+            // 3. ENFORCE VALIDATION (If failed, comment and close)
+            if (isInvalid) {
+              // Add 'invalid' label
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: ["invalid"]
+              });
+
+              // Leave a polite but firm comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `**Automated Validation Bot**\n\nHi @${issue.user.login}, thanks for opening an issue! Unfortunately, this issue is missing critical information:\n\n> ⚠️ ${invalidReason}\n\nThis issue has been automatically closed for now. Please update it with the required details, and we will be happy to reopen it! Check out our contribution guidelines for more information.`
+              });
+
+              // Close the issue
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: "closed",
+                state_reason: "not_planned"
+              });
+            }
