@@ -240,12 +240,20 @@ def telemetry_query(
 @app.get("/api/telemetry/stats")
 def get_telemetry_stats(db: DbSession, current_user: AuthenticatedUser):
     metrics = (
-    db.query(func.count(models.DeviceTelemetryLog.id)).label("total_records"),
-    db.query(func.count(func.distinct(models.DeviceTelemetryLog.device_id))).label("total_devices"),
-    db.query(func.avg(models.DeviceTelemetryLog.cpu_usage)).label("avg_cpu_usage"),
-    db.query(func.avg(models.DeviceTelemetryLog.memory_usage)).label("avg_ram_usage"),
-    db.query(func.count(models.DeviceTelemetryLog.id).filter(models.DeviceTelemetryLog.status == "CRITICAL")).label("anomalies")
-).first()
+        db.query(func.count(models.DeviceTelemetryLog.id)).label("total_records"),
+        db.query(func.count(func.distinct(models.DeviceTelemetryLog.device_id))).label(
+            "total_devices"
+        ),
+        db.query(func.avg(models.DeviceTelemetryLog.cpu_usage)).label("avg_cpu_usage"),
+        db.query(func.avg(models.DeviceTelemetryLog.memory_usage)).label(
+            "avg_ram_usage"
+        ),
+        db.query(
+            func.count(models.DeviceTelemetryLog.id).filter(
+                models.DeviceTelemetryLog.status == "CRITICAL"
+            )
+        ).label("anomalies"),
+    ).first()
     return {
         "total_records": metrics.total_records or 0,
         "total_devices": metrics.total_devices or 0,
