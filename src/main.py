@@ -238,7 +238,7 @@ def telemetry_query(
 
 
 @app.get("/api/telemetry/stats")
-def get_telemetry_stats(db: DbSession, current_user: AuthenticatedUser):
+def get_telemetry_stats(db: DbSession, current_user: PrivilegedUser):
     metrics = (
         db.query(func.count(models.DeviceTelemetryLog.id)).label("total_records"),
         db.query(func.count(func.distinct(models.DeviceTelemetryLog.device_id))).label(
