@@ -7,3 +7,4 @@ venv/
 .editable.*/
 build/
 dist/
+*.db
