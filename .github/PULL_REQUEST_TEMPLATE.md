@@ -29,16 +29,17 @@
 ---
 
 ## OWASP Security Analysis
-*A self-review of threat modelling conducted on these changes:*
+*A self-review mapping these code changes against the OWASP Top 10 Security Risks:*
 
-| Threat Category | Potential Risk Identified | Mitigation Strategy Applied |
+| OWASP Risk Category | Potential Risk Identified | Mitigation Strategy Applied |
 | :--- | :--- | :--- |
-| **Spoofing** | e.g. User identity faked | Used robust session tokens / verified authentication |
-| **Tampering** | e.g. Query parameters altered | Server-side validation enforced on all inputs |
-| **Repudiation** | e.g. Actions cannot be traced | Implemented structured logging for critical actions |
-| **Info Disclosure** | e.g. Sensitive data leaked | Sensitive keys hidden via environment variables |
-| **Denial of Service** | e.g. API spamming crashes app| Implemented rate-limiting / optimized loop complexity |
-| **Elevation of Priv.**| e.g. Regular user accesses admin| Role-based access control checked strictly on backend |
+| **A01:2021-Broken Access Control** | Regular users bypassing checks or elevating privileges to access admin features. | Role-based access control (RBAC) checked strictly on backend endpoints. |
+| **A03:2021-Injection** | Query parameters or telemetry data altered to manipulate backend databases or systems. | Server-side validation and parameterised queries enforced on all inputs. |
+| **A04:2021-Insecure Design** | API endpoint spamming leading to resource exhaustion, memory overload, or system crashes. | Implemented rate-limiting and optimised compute loop complexity. |
+| **A05:2021-Security Misconfiguration** | Exposure of sensitive system credentials or verbose debug logs. | Sensitive keys entirely hidden and managed via environment variables. |
+| **A07:2021-Identification & Auth Failures** | User identities faked or sessions hijacked due to weak credential handling. | Used robust session tokens and verified stateless/stateful authentication. |
+| **A09:2021-Security Logging & Monitoring Failures** | Critical system actions or anomalies occurring without an auditable trail, leading to non-repudiation. | Implemented structured logging for critical actions to guarantee auditability. |
+
 
 ---
 
