@@ -1,9 +1,3 @@
-import sys
-
-sys.path.append(
-    "c:/Users/hydro/OneDrive/Program Files/SentinelVaultRefactor/sentinel-vault-backend/src"
-)
-
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
