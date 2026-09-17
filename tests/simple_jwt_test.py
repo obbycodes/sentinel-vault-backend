@@ -1,5 +1,3 @@
-
-
 from security import create_access_token, decode_access_token
 
 token = create_access_token({"username": "alex", "role": "admin"})
