@@ -8,4 +8,4 @@ ignore = []
 
 [tool.bandit]
 exclude_dirs = ["tests", "venv", ".venv"]
-tests = ["B201", "B301"] 
+tests = ["B201", "B301"]

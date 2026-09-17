@@ -1,9 +1,5 @@
 import sys
 
-sys.path.append(
-    "c:/Users/hydro/OneDrive/Program Files/SentinelVaultRefactor/sentinel-vault-backend/src"
-)
-
 from security import hash_password, verify_password
 
 RAW_PASSWORD = str(input("Enter a password: "))

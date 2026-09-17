@@ -5,6 +5,7 @@ from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 import models
@@ -234,3 +235,29 @@ def telemetry_query(
     )
 
     return records
+
+
+@app.get("/api/telemetry/stats")
+def get_telemetry_stats(db: DbSession, current_user: PrivilegedUser):
+    metrics = (
+        db.query(func.count(models.DeviceTelemetryLog.id)).label("total_records"),
+        db.query(func.count(func.distinct(models.DeviceTelemetryLog.device_id))).label(
+            "total_devices"
+        ),
+        db.query(func.avg(models.DeviceTelemetryLog.cpu_usage)).label("avg_cpu_usage"),
+        db.query(func.avg(models.DeviceTelemetryLog.memory_usage)).label(
+            "avg_ram_usage"
+        ),
+        db.query(
+            func.count(models.DeviceTelemetryLog.id).filter(
+                models.DeviceTelemetryLog.status == "CRITICAL"
+            )
+        ).label("anomalies"),
+    ).first()
+    return {
+        "total_records": metrics.total_records or 0,
+        "total_devices": metrics.total_devices or 0,
+        "avg_cpu_usage": metrics.avg_cpu_usage or 0,
+        "avg_ram_usage": metrics.avg_ram_usage or 0,
+        "anomalies": metrics.anomalies or 0,
+    }
