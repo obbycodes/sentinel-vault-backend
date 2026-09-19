@@ -23,8 +23,7 @@ jobs:
       run: |
         export PIP_REQUIRE_HASHES=true
         export PIP_ONLY_BINARY=:all:
-        printf "https://pythonhosted.org#sha256:13ab279d520146a3401d56af946699ca40de062082cfe1d721c5afe301941971 --hash=sha256:13ab279d520146a3401d56af946699ca40de062082cfe1d721c5afe301941971\n" > pip-upgrade.txt
-        python -m pip install -r pip-upgrade.txt
+        python -m pip install --index-url https://pypi.org/simple/ pip==26.2
         rm pip-upgrade.txt
         pip install --no-deps -e .
         pip install --require-hashes --only-binary :all: --no-deps -r requirements.txt
@@ -51,9 +50,7 @@ jobs:
       run: |
         export PIP_REQUIRE_HASHES=true
         export PIP_ONLY_BINARY=:all:
-        printf "https://pythonhosted.org#sha256:13ab279d520146a3401d56af946699ca40de062082cfe1d721c5afe301941971 --hash=sha256:13ab279d520146a3401d56af946699ca40de062082cfe1d721c5afe301941971\n" > pip-upgrade.txt
-        python -m pip install -r pip-upgrade.txt
-        rm pip-upgrade.txt
+        python -m pip install --index-url https://pypi.org/simple/ pip==26.2
         python -m pip install ruff bandit toml
 
     - name: Run Ruff Formatter (Black style)
