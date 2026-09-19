@@ -21,7 +21,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        printf "pip==26.2.1 --hash=sha256:7fd9d39b8bc737397b952f4bcfc70f1a9d0a6a2c222b40a33a5b060d00f722a4" > pip-upgrade.txt
+        printf "pip==26.2 --hash=sha256:931c303696af6fa3417112103b1cad26890e5a07eccb5b99783700e33f2b8aad" > pip-upgrade.txt
         python -m pip install --require-hashes --only-binary :all: pip==26.2 -r pip-upgrade.txt
         rm pip-upgrade.txt
         pip install --no-deps -e .
@@ -47,7 +47,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        printf "pip==26.2.1 --hash=sha256:7fd9d39b8bc737397b952f4bcfc70f1a9d0a6a2c222b40a33a5b060d00f722a4" > pip-upgrade.txt
+        printf "pip==26.2 --hash=sha256:931c303696af6fa3417112103b1cad26890e5a07eccb5b99783700e33f2b8aad" > pip-upgrade.txt
         python -m pip install --require-hashes --only-binary :all: pip==26.2 -r pip-upgrade.txt
         python -m pip install ruff bandit toml
 
