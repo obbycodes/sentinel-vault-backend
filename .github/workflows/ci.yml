@@ -24,7 +24,6 @@ jobs:
         export PIP_REQUIRE_HASHES=true
         export PIP_ONLY_BINARY=:all:
         python -m pip install --index-url https://pypi.org/simple/ pip==26.2
-        rm pip-upgrade.txt
         pip install --no-deps -e .
         pip install --require-hashes --only-binary :all: --no-deps -r requirements.txt
 
