@@ -23,7 +23,7 @@ jobs:
       run: |
         export PIP_REQUIRE_HASHES=true
         export PIP_ONLY_BINARY=:all:
-        python -m pip install "https://pythonhosted.org"
+        python -m pip install "https://pythonhosted.org#sha256:13ab279d520146a3401d56af946699ca40de062082cfe1d721c5afe301941971"
         pip install --no-deps -e .
         pip install --require-hashes --only-binary :all: --no-deps -r requirements.txt
 
@@ -49,7 +49,7 @@ jobs:
       run: |
         export PIP_REQUIRE_HASHES=true
         export PIP_ONLY_BINARY=:all:
-        python -m pip install "https://pythonhosted.org"
+        python -m pip install "https://pythonhosted.org#sha256:13ab279d520146a3401d56af946699ca40de062082cfe1d721c5afe301941971"
         python -m pip install ruff bandit toml
 
     - name: Run Ruff Formatter (Black style)
