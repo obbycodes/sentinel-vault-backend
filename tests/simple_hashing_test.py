@@ -1,16 +1,18 @@
-import sys
-
 from security import hash_password, verify_password
 
-RAW_PASSWORD = str(input("Enter a password: "))
-hashed_password = hash_password(RAW_PASSWORD)
 
-print(f"Hashed password: {hashed_password}")
-print(f"Verifying password: {verify_password(RAW_PASSWORD, hashed_password)}")
+def test_hashing():
+    RAW_PASSWORD = "TEST_PASSWORD!"
+    hashed_password = hash_password(RAW_PASSWORD)
 
-wrong_password = str(input("Now enter a wrong password: "))
-print(f"Verifying wrong password: {verify_password(wrong_password, hashed_password)}")
-print("[TEST ENDED] Exiting terminal.")
-print("-" * 20)
+    assert verify_password(RAW_PASSWORD, hashed_password) is True
 
-sys.exit()
+def test_wrong_hashing():
+    RAW_PASSWORD = "TEST_PASSWORD!"
+    WRONG_PASSWORD = "FAKE_PASSWORD!"
+
+    hashed_password = hash_password(RAW_PASSWORD)
+
+    assert verify_password(WRONG_PASSWORD, hashed_password) is False
+
+
