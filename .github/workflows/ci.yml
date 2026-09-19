@@ -21,7 +21,9 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        python -m pip install --require-hashes --only-binary :all: pip==26.2 --hash=sha256:a6fb631024bd3cf6b957e844fa0e0e184fa95e0c0349479b1bfb95e0e0bb5131 --hash=sha256:7fd9d39b8bc737397b952f4bcfc70f1a9d0a6a2c222b40a33a5b060d00f722a4
+        printf "pip==26.2.1 --hash=sha256:7fd9d39b8bc737397b952f4bcfc70f1a9d0a6a2c222b40a33a5b060d00f722a4" > pip-upgrade.txt
+        python -m pip install --require-hashes --only-binary :all: pip==26.2 -r pip-upgrade.txt
+        rm pip-upgrade.txt
         pip install --no-deps -e .
         pip install --require-hashes --only-binary :all: --no-deps -r requirements.txt
 
@@ -45,7 +47,8 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        python -m pip install --require-hashes --only-binary :all: pip==26.2 --hash=sha256:a6fb631024bd3cf6b957e844fa0e0e184fa95e0c0349479b1bfb95e0e0bb5131 --hash=sha256:7fd9d39b8bc737397b952f4bcfc70f1a9d0a6a2c222b40a33a5b060d00f722a4
+        printf "pip==26.2.1 --hash=sha256:7fd9d39b8bc737397b952f4bcfc70f1a9d0a6a2c222b40a33a5b060d00f722a4" > pip-upgrade.txt
+        python -m pip install --require-hashes --only-binary :all: pip==26.2 -r pip-upgrade.txt
         python -m pip install ruff bandit toml
 
     - name: Run Ruff Formatter (Black style)
