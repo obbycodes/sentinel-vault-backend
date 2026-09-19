@@ -21,7 +21,9 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        python -m pip install --require-hashes --only-binary :all: pip==26.2 --hash=sha256:931c303696af6fa3417112103b1cad26890e5a07eccb5b99783700e33f2b8aad
+        export PIP_REQUIRE_HASHES=true
+        export PIP_ONLY_BINARY=:all:
+        python -m pip install "https://pythonhosted.org"
         pip install --no-deps -e .
         pip install --require-hashes --only-binary :all: --no-deps -r requirements.txt
 
@@ -45,7 +47,9 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        python -m pip install --require-hashes --only-binary :all: pip==26.2 --hash=sha256:931c303696af6fa3417112103b1cad26890e5a07eccb5b99783700e33f2b8aad
+        export PIP_REQUIRE_HASHES=true
+        export PIP_ONLY_BINARY=:all:
+        python -m pip install "https://pythonhosted.org"
         python -m pip install ruff bandit toml
 
     - name: Run Ruff Formatter (Black style)
