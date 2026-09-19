@@ -10,6 +10,7 @@ def test_encoding_and_decoding_token():
     assert valid_data["username"] == "alex"
     assert valid_data["role"] == "admin"
 
+
 def test_tampered_token_returns_none():
     token = create_access_token({"username": "alex", "role": "admin"})
     assert token is not None
