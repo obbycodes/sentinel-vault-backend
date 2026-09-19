@@ -1,3 +1,12 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python_modules"
+version = "0.1.0"
+description = "Module setup for project environment."
+
 [tool.ruff]
 target-version = "py310"
 line-length = 88
@@ -9,3 +18,7 @@ ignore = []
 [tool.bandit]
 exclude_dirs = ["tests", "venv", ".venv"]
 tests = ["B201", "B301"]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+py-modules = ["auth", "database", "main", "models", "schemas", "security"]
