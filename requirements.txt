@@ -58,7 +58,6 @@ pymdown-extensions==11.0.2
 pyproject_hooks==1.3.3
 pytest==9.1.1
 python-dateutil==2.9.0.post0
--e git+https://github.com/obbycodes/sentinel-vault-backend.git@22c3d05f6cdd54f9f0de2fc512f690d43e6920f8#egg=python_modules
 pytokens==0.4.1
 PyYAML==6.0.3
 pyyaml_env_tag==1.1
