@@ -19,17 +19,24 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install Dependencies
+    - name: Upgrade Pip Securely using Locked Hashes
       run: |
         export PIP_REQUIRE_HASHES=true
         export PIP_ONLY_BINARY=:all:
-        printf "pip==26.2 --hash=sha256:931c303696af6fa3417112103b1cad26890e5a07eccb5b99783700e33f2b8aad\n" > pip-upgrade.txt
-        python -m pip install -r pip-upgrade.txt
-        rm pip-upgrade.txt
-        unset PIP_REQUIRE_HASHES
-        pip install --no-deps -e .
+        python -m pip install --no-deps -r ci-tools.txt
+  
+    - name: Install Secure Production & Testing Packages
+      run: |
         export PIP_REQUIRE_HASHES=true
-        pip install --require-hashes --only-binary :all: --no-deps -r requirements.txt
+        export PIP_ONLY_BINARY=:all:
+        python -m pip install --no-deps -r requirements.txt
+        python -m pip install --no-deps -r ci-tools.txt
+
+    - name: Mount Local Code and Discover Source Modules
+      run: |
+        unset PIP_REQUIRE_HASHES
+        unset PIP_ONLY_BINARY
+        python -m pip install --no-deps -e .
 
     - name: Execute Automated Security Tests
       env:
@@ -49,13 +56,12 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install Dependencies
+    - name: Install Secure Production & Quality Control Packages
       run: |
         export PIP_REQUIRE_HASHES=true
         export PIP_ONLY_BINARY=:all:
-        printf "pip==26.2 --hash=sha256:931c303696af6fa3417112103b1cad26890e5a07eccb5b99783700e33f2b8aad\n" > pip-upgrade.txt
-        python -m pip install -r pip-upgrade.txt
-        python -m pip install -r ci-tools.txt
+        python -m pip install --no-deps -r requirements.txt
+        python -m pip install --no-deps -r ci-tools.txt
         
 
     - name: Run Ruff Formatter (Black style)
