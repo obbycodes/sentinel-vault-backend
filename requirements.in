@@ -8,3 +8,4 @@ slowapi
 joserfc
 pwdlib
 pwdlib[argon2]
+httpx2
