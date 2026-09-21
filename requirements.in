@@ -1,0 +1,10 @@
+fastapi
+pydantic
+SQLAlchemy
+uvicorn
+pydantic
+pytest
+slowapi
+joserfc
+pwdlib
+typing
