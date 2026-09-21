@@ -1,9 +1,10 @@
 fastapi
 pydantic
+pydantic[email]
 SQLAlchemy
 uvicorn
-pydantic
 pytest
 slowapi
 joserfc
 pwdlib
+pwdlib[argon2]
