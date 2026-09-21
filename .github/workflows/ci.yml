@@ -64,7 +64,6 @@ jobs:
 
     - name: Secret Scanning (Detect-Secrets)
       run: |
-        pip install detect-secrets
         detect-secrets-hook --baseline .secrets.baseline $(git ls-files)
 
   unit-testing:
