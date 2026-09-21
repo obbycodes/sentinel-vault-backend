@@ -8,14 +8,12 @@ on:
     branches:
       - main
 
-# Best Practice: Clear all default permissions to enforce the principle of least privilege
 permissions: {}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     
-    # Restrict write capabilities strictly to this specific deployment runner
     permissions:
       contents: write
 
@@ -23,19 +21,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Fetch full history so gh-deploy can reference branches and safely push changes
           fetch-depth: 0 
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip' # Automatically caches installed pip packages securely
+          cache: 'pip' 
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip 
-          pip install mkdocs-material==9.7.7
+          python -m pip install --no-deps -r ci-tools.txt
 
       - name: Configure Git Bot Identity
         run: |
