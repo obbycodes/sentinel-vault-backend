@@ -2,9 +2,9 @@ name: CI Quality Checks
 
 on:
   push:
-    branches: [ "main", "master", "chore/pytest" ]
+    branches: [ "main", "master", "chore/sast" ]
   pull_request:
-    branches: [ "main", "master", "chore/pytest" ]
+    branches: [ "main", "master", "chore/sast" ]
 
 jobs:  
   quality-control:
@@ -63,7 +63,7 @@ jobs:
         bandit -r app/ -ll -ii
 
     - name: Secret Scanning (Detect-Secrets)
-      RUN: |
+      run: |
         pip install detect-secrets
         detect-secrets-hook --baseline .secrets.baseline $(git ls-files)
 
