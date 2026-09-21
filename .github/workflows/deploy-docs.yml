@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 # Best Practice: Clear all default permissions to enforce the principle of least privilege
 permissions: {}
