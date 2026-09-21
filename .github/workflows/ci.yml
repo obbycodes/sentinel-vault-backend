@@ -26,7 +26,9 @@ jobs:
         printf "pip==26.2 --hash=sha256:931c303696af6fa3417112103b1cad26890e5a07eccb5b99783700e33f2b8aad\n" > pip-upgrade.txt
         python -m pip install -r pip-upgrade.txt
         rm pip-upgrade.txt
+        unset PIP_REQUIRE_HASHES
         pip install --no-deps -e .
+        export PIP_REQUIRE_HASHES=true
         pip install --require-hashes --only-binary :all: --no-deps -r requirements.txt
 
     - name: Execute Automated Security Tests
