@@ -2,9 +2,9 @@ name: CI Quality Checks
 
 on:
   push:
-    branches: [ "main", "master", "chore/pytest" ]
+    branches: [ "main", "master", "chore/sast" ]
   pull_request:
-    branches: [ "main", "master", "chore/pytest" ]
+    branches: [ "main", "master", "chore/sast" ]
 
 jobs:  
   quality-control:
