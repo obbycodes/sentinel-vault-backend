@@ -3,3 +3,4 @@ ruff==0.16.8
 bandit==1.9.4
 toml==0.10.2
 pytest
+mkdocs
