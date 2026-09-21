@@ -210,6 +210,10 @@ colorama==0.4.6 \
     #   mkdocs
     #   mkdocs-material
     #   pytest
+detect-secrets==1.5.0 \
+    --hash=sha256:6bb46dcc553c10df51475641bb30fd69d25645cc12339e46c824c1e0c388898a \
+    --hash=sha256:e24e7b9b5a35048c313e983f76c4bd09dad89f045ff059e354f9943bf45aa060
+    # via -r ci-tools.in
 ghp-import==2.1.0 \
     --hash=sha256:8337dd7b50877f163d4c0289bc1f1c7f127550241988d568c1db512c4324a619 \
     --hash=sha256:9c535c4c61193c2df8871222567d7fd7e5014d835f97dc7b7439069e2413d343
@@ -479,6 +483,7 @@ pyyaml==6.0.3 \
     --hash=sha256:fc09d0aa354569bc501d4e787133afc08552722d3ab34836a80547331bb5d4a0
     # via
     #   bandit
+    #   detect-secrets
     #   mkdocs
     #   mkdocs-get-deps
     #   pymdown-extensions
@@ -490,7 +495,9 @@ pyyaml-env-tag==1.1 \
 requests==2.34.2 \
     --hash=sha256:2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0 \
     --hash=sha256:f288924cae4e29463698d6d60bc6a4da69c89185ad1e0bcc4104f584e960b9ed
-    # via mkdocs-material
+    # via
+    #   detect-secrets
+    #   mkdocs-material
 rich==15.0.0 \
     --hash=sha256:33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb \
     --hash=sha256:edd07a4824c6b40189fb7ac9bc4c52536e9780fbbfbddf6f1e2502c31b068c36
