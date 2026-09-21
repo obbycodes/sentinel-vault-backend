@@ -63,7 +63,7 @@ jobs:
         bandit -r app/ -ll -ii
 
     - name: Secret Scanning (Detect-Secrets)
-      RUN: |
+      run: |
         pip install detect-secrets
         detect-secrets-hook --baseline .secrets.baseline $(git ls-files)
 
