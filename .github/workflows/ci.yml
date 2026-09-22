@@ -7,8 +7,33 @@ on:
     branches: [ "main", "master", "chore/sast" ]
 
 jobs:  
+  dependency-scanning:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Secure Production & Quality Control Packages
+      run: |
+        export PIP_REQUIRE_HASHES=true
+        export PIP_ONLY_BINARY=:all:
+        python -m pip install --no-deps -r requirements.txt
+        python -m pip install --no-deps -r ci-tools.txt
+        
+
+    - name: Run dependency Vulnerability Audit (pip-audit)
+      run: |
+        pip-audit -r requirements.txt
+
   quality-control:
     runs-on: ubuntu-latest
+    needs: dependency-scanning
 
     steps:
     - name: Checkout Repository
@@ -103,6 +128,7 @@ jobs:
         secret_key: ${{ secrets.TEST_SECRET_KEY }}
       run: |
         pytest --maxfail=1 --disable-warnings
+      
 
 
   
