@@ -2,13 +2,98 @@ name: CI Quality Checks
 
 on:
   push:
-    branches: [ "main", "master", "chore/pytest" ]
+    branches: [ "main", "master", "chore/sast" ]
   pull_request:
-    branches: [ "main", "master", "chore/pytest" ]
+    branches: [ "main", "master", "chore/sast" ]
 
-jobs:
+jobs:  
+  dependency-scanning:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Secure Production & Quality Control Packages
+      run: |
+        export PIP_REQUIRE_HASHES=true
+        export PIP_ONLY_BINARY=:all:
+        python -m pip install --no-deps -r requirements.txt
+        python -m pip install --no-deps -r ci-tools.txt
+        
+
+    - name: Run dependency Vulnerability Audit (pip-audit)
+      run: |
+        pip-audit -r requirements.txt
+
+  quality-control:
+    runs-on: ubuntu-latest
+    needs: dependency-scanning
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Secure Production & Quality Control Packages
+      run: |
+        export PIP_REQUIRE_HASHES=true
+        export PIP_ONLY_BINARY=:all:
+        python -m pip install --no-deps -r requirements.txt
+        python -m pip install --no-deps -r ci-tools.txt
+        
+
+    - name: Run Ruff Formatter (Black style)
+      run: ruff format --check .
+
+    - name: Run Ruff Linter
+      run: ruff check .
+
+    - name: Run Bandit Security Scanner
+      run: python -m bandit -r . -c pyproject.toml
+
+  security-scans:
+    runs-on: ubuntu-latest
+    needs: quality-control
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install Secure Production & SAST Analysis Packages
+      run: |
+        export PIP_REQUIRE_HASHES=true
+        export PIP_ONLY_BINARY=:all:
+        python -m pip install --no-deps -r requirements.txt
+        python -m pip install --no-deps -r ci-tools.txt
+    
+    - name: Run Recursive SAST Code Analysis (Bandit)
+      run: |
+        bandit -r app/ -ll -ii
+
+    - name: Secret Scanning (Detect-Secrets)
+      run: |
+        detect-secrets-hook --baseline .secrets.baseline $(git ls-files)
+
   unit-testing:
     runs-on: ubuntu-latest
+    needs: security-scans
 
     steps:
     - name: Checkout Repository
@@ -43,32 +128,9 @@ jobs:
         secret_key: ${{ secrets.TEST_SECRET_KEY }}
       run: |
         pytest --maxfail=1 --disable-warnings
+      
 
-  quality-control:
-    runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
+  
+  
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-
-    - name: Install Secure Production & Quality Control Packages
-      run: |
-        export PIP_REQUIRE_HASHES=true
-        export PIP_ONLY_BINARY=:all:
-        python -m pip install --no-deps -r requirements.txt
-        python -m pip install --no-deps -r ci-tools.txt
-        
-
-    - name: Run Ruff Formatter (Black style)
-      run: ruff format --check .
-
-    - name: Run Ruff Linter
-      run: ruff check .
-
-    - name: Run Bandit Security Scanner
-      run: python -m bandit -r . -c pyproject.toml
