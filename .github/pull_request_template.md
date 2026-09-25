@@ -4,6 +4,7 @@ GitHub does not provide a UI dropdown for PR templates. Please switch to the **"
 
 * [Click here to load the **Feature Template**](?expand=1&pr_layout=feature.md)
 * [Click here to load the **Chore / Infrastructure Template**](?expand=1&pr_layout=chore.md)
+* [Click here to load the **Architectural Decision Follow-Up Template**](?=expand=1&pr_layout=adr.md)
 
 ---
 *Note: Clicking a link will refresh the page and load the selected layout.*
