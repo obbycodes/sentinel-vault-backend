@@ -45,10 +45,10 @@ jobs:
 
 
     - name: Post Report to PR
-        uses: thollander/actions-comment-pull-request@v3
-        with:
-          file_path: pytest-report.md
-          comment_tag: pytest_results 
+      uses: thollander/actions-comment-pull-request@v3
+      with:
+        file_path: pytest-report.md
+        comment_tag: pytest_results 
 
     - name: Archive Test Log Artifacts
       if: always() 
