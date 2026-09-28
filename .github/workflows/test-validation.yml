@@ -35,6 +35,7 @@ jobs:
 
     - name: Run automated tests
       run: |
+        mkdir -p test-results
         pytest --junitxml=test-results/report.xml
       
 
@@ -44,7 +45,7 @@ jobs:
         pytest --md-report \
           --md-report-output pytest-report.md \
           --md-report-flavor gfm \
-          --md-report-results \
+          --md-report-verbose 1 \
           --md-report-exclude-outcomes skipped,xfailed,xpassed
         PYTEST_EXIT_CODE=$?
         set -e
