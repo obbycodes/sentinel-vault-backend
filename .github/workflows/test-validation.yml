@@ -1,0 +1,44 @@
+name: Automated Testing & Audit Logs
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Fetch the code from the repository
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2. Set up the Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-python-version: '3.11'
+
+    # 3. Install dependencies
+    - name: Install dependencies
+      run: |
+        export PIP_REQUIRE_HASHES=true
+        export PIP_ONLY_BINARY=:all:
+        python -m pip install --no-deps -r ci-tools.txt
+        python -m pip install --no-deps -r requirements.txt
+
+    # 4. Execute tests and generate a standardized XML report
+    - name: Run automated tests
+      run: |
+        pytest --junitxml=test-results/report.xml
+
+    # 5. Automatically archive the logs as an unalterable artifact
+    - name: Archive Test Log Artifacts
+      if: always() # Ensures logs are saved even if a test fails
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-execution-logs-${{ github.run_number }}
+        path: test-results/
+        retention-days: 30
