@@ -20,6 +20,12 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-python-version: '3.11'
+    
+    - name: Mount Local Code & Python Modules
+      run: |
+        unset PIP_REQUIRE_HASHES
+        unset PIP_ONLY_BINARY
+        python -m pip install --no-deps -e .
 
     # 3. Install dependencies
     - name: Install dependencies
