@@ -40,15 +40,37 @@ jobs:
 
     - name: Run Pytest & Generate MD Log
       run: |
-        pytest --md-report --md-report-output pytest-report.md
-      continue-on-error: true 
+        set +e
+        pytest --md-report \
+          --md-report-output pytest-report.md \
+          --md-report-flavor gfm \
+          --md-report-results \
+          --md-report-exclude-outcomes skipped,xfailed,xpassed
+        PYTEST_EXIT_CODE=$?
+        set -e
+
+        if [ $PYTEST_EXIT_CODE -eq 0 ]; then
+          # SUCCESS CASE
+          HEADER="### ✅ Automated Test Results: PASSED\n\n> [!NOTE]\n> All backend authentication and security tests have successfully passed in this run.\n"
+        else
+          # FAILURE CASE
+          HEADER="### ❌ Automated Test Results: FAILED\n\n> [!CAUTION]\n> Some or all tests have failed in this run. Review the details in the table below to debug the authentication pipeline.\n"
+        fi
+
+        sed -i "1i $HEADER" pytest-report.md
+
+        exit $PYTEST_EXIT_CODE
 
 
     - name: Post Report to PR
+      if: always()
       uses: thollander/actions-comment-pull-request@v3
       with:
         file-path: pytest-report.md
-        comment-tag: pytest_results 
+        comment-tag: pytest_results
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        mode: upsert
+        create-if-not-exists: true
 
     - name: Archive Test Log Artifacts
       if: always() 
