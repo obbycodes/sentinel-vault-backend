@@ -68,7 +68,7 @@ jobs:
 
     - name: Post Report to PR
       if: always()
-      uses: thollander/actions-comment-pull-request@v3
+      uses: thollander/actions-comment-pull-request@24bffb9b472e351351199346618456de90bf4352
       with:
         file-path: pytest-report.md
         comment-tag: pytest_results
