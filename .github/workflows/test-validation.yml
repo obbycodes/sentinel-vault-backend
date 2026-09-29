@@ -41,12 +41,14 @@ jobs:
 
     - name: Run Pytest & Generate MD Log
       run: |
+        set +e
         pytest --md-report \
           --md-report-output pytest-report.md \
           --md-report-flavor gfm \
           --md-report-verbose 1 \
           --md-report-exclude-outcomes skipped,xfailed,xpassed
         PYTEST_EXIT_CODE=$?
+        set -e
 
         if [ $PYTEST_EXIT_CODE -eq 0 ]; then
           # SUCCESS CASE
