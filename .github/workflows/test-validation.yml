@@ -60,6 +60,9 @@ jobs:
 
         sed -i "1i $HEADER" pytest-report.md
 
+        SHORT_SHA=(echo "{{ github.sha }}" | cut -c1-7)
+        echo -e "\n---\n*Report generated for commit: \`$SHORT_SHA\`*" >> pytest-report.md
+
         exit $PYTEST_EXIT_CODE
 
 
