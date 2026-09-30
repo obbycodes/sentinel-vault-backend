@@ -83,6 +83,14 @@ jobs:
           pytest --json-report --json-report-file=pytest-report.json
         continue-on-error: true
       
+      - name: Checkout PR Head for Ledger Push
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+
+          clean: false 
+      
       - name: Update Test Ledger Table
         run: python update_ledger.py
 
@@ -91,8 +99,8 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@://github.com"
           git add TEST_HISTORY.md
-          git commit -m "docs: automated update of test history ledger [skip ci]" || echo "No changes to commit"
-          git push
+          git commit -m "chore(ci): update TEST_HISTORY.md with run results [skip ci]" || echo "No changes to commit"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
 
       - name: Archive Test Logs
         uses: actions/upload-artifact@v4
