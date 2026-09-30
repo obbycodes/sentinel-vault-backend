@@ -60,7 +60,7 @@ jobs:
 
           echo -e "\n<!-- comment-tag: pytest_results -->" >> pytest-report.md
 
-          exit \$PYTEST_EXIT_CODE
+          exit $PYTEST_EXIT_CODE
 
       - name: Post Report to PR
         if: always()
