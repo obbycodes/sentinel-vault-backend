@@ -27,7 +27,11 @@ timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 commit_sha = os.getenv("GITHUB_SHA", "Local Run")[:7]
 run_id = os.getenv("GITHUB_RUN_ID", "")
 
-trigger_text = f"[{commit_sha}](https://github.com{os.getenv('GITHUB_REPOSITORY')}/commit/{commit_sha})" if run_id else "Local"
+trigger_text = (
+    f"[{commit_sha}](https://github.com{os.getenv('GITHUB_REPOSITORY')}/commit/{commit_sha})"
+    if run_id
+    else "Local"
+)
 
 # 2. Build the markdown row
 new_row = f"| {timestamp} | {trigger_text} | {passed} | {failed} | {skipped} | {total} | {status} |\n"
