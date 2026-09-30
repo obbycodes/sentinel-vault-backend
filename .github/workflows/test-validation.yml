@@ -18,7 +18,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install Secure Production & Testing Packages
         run: |
@@ -43,9 +43,8 @@ jobs:
             --md-report-flavor gfm \
             --md-report-verbose 1 \
             --md-report-exclude-outcomes skipped,xfailed,xpassed || PYTEST_EXIT_CODE=$?
-          set -e
-          
           PYTEST_EXIT_CODE=${PYTEST_EXIT_CODE:-0}
+          set -e
 
           if [ "$PYTEST_EXIT_CODE" -eq 0 ]; then
             HEADER="### ✅ Automated Test Results: PASSED\n\n> [!NOTE]\n> All backend authentication and security tests have successfully passed in this run.\n"
