@@ -101,7 +101,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@://github.com"
           git add TEST_HISTORY.md
-          git commit -m "chore(ci): update TEST_HISTORY.md with run results [skip ci]" || echo "No changes to commit"
+          git commit -m "chore(ci): update TEST_HISTORY.md with run results" || echo "No changes to commit"
           git fetch origin "$PR_BRANCH"
           git push origin HEAD:"$PR_BRANCH"
 
