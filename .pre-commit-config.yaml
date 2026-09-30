@@ -19,3 +19,12 @@ repos:
     hooks:
       - id: detect-secrets
         args: ["--baseline", ".secrets.baseline"]
+
+  - repo: local
+    hooks:
+      - id: run-pytest-md
+        name: Generate Local Test Log
+        entry: pytest --md-report --md-report-output pytest-report.md
+        language: system
+        pass_filenames: false
+        always_run: true

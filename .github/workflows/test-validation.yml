@@ -76,3 +76,29 @@ jobs:
             echo "No existing comment found. Creating a new one..."
             gh pr comment ${{ github.event.pull_request.number }} --body-file=pytest-report.md
           fi
+    
+      - name: Run Pytest
+        run: |
+          pytest --junitxml=junit-report.xml --md-report --md-report-output test-summary.md
+          pytest --json-report --json-report-file=pytest-report.json
+        continue-on-error: true
+      
+      - name: Update Test Ledger Table
+        run: python update_ledger.py
+
+      - name: Commit and Push Updated Ledger
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@://github.com"
+          git add TEST_HISTORY.md
+          git commit -m "docs: automated update of test history ledger [skip ci]" || echo "No changes to commit"
+          git push
+
+      - name: Archive Test Logs
+          uses: actions/upload-artifact@v4
+          with:
+            name: pytest-logs-build-${{ github.run_number }}
+            path: |
+              test-summary.md
+              junit-report.xml
+            retention-days: 90 
