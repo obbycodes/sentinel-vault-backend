@@ -43,7 +43,7 @@ jobs:
             --md-report-output pytest-report.md \
             --md-report-flavor gfm \
             --md-report-verbose 1 \
-            --md-report-exclude-outcomes skipped,xfailed,xpassed || PYTEST_EXIT_CODE=$?
+            --md-report-exclude-outcomes skipped,xfailed,xpassed
           PYTEST_EXIT_CODE=$?
           set -e
 
