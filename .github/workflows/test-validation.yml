@@ -26,27 +26,25 @@ jobs:
 
       - name: Run Pytest & Generate MD Log
         run: |
-          set +e
           pytest --md-report \
             --md-report-output pytest-report.md \
             --md-report-flavor gfm \
-            --md-report-results \
-            --md-report-exclude-outcomes skipped,xfailed,xpassed
-          PYTEST_EXIT_CODE=\$?
-          set -e
+            --md-report-verbose 1 \
+            --md-report-exclude-outcomes skipped,xfailed,xpassed || PYTEST_EXIT_CODE=\$?
+          
+          PYTEST_EXIT_CODE=\${PYTEST_EXIT_CODE:-0}
 
-          if [ \$PYTEST_EXIT_CODE -eq 0 ]; then
+          if [ "\$PYTEST_EXIT_CODE" -eq 0 ]; then
             HEADER="### ✅ Automated Test Results: PASSED\n\n> [!NOTE]\n> All backend authentication and security tests have successfully passed in this run.\n"
           else
             HEADER="### ❌ Automated Test Results: FAILED\n\n> [!CAUTION]\n> Some tests have failed in this run. Review the details in the table below to debug the authentication pipeline.\n"
           fi
+          
           sed -i "1i \$HEADER" pytest-report.md
 
-          # Append a professional footer with the short commit SHA
-          SHORT_SHA=(echo "{{ github.sha }}" | cut -c1-7)
+          SHORT_SHA=\((echo "\){{ github.sha }}" | cut -c1-7)
           echo -e "\n---\n*Report generated natively for commit: \`$SHORT_SHA\`*" >> pytest-report.md
 
-          # Append our unique hidden tag so the CLI can find this comment later
           echo -e "\n<!-- comment-tag: pytest_results -->" >> pytest-report.md
 
           exit \$PYTEST_EXIT_CODE
@@ -56,13 +54,11 @@ jobs:
         env:
           GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
         run: |
-          # 1. Look for a comment on this PR that contains our unique hidden tag
-          EXISTING_COMMENT=(gh pr view {{ github.event.pull_request.number }} --json comments --jq '.comments[] | select(.body | contains("comment-tag: pytest_results")) | .id' | head -n 1)
+          EXISTING_COMMENT=\((gh pr view\){{ github.event.pull_request.number }} --json comments --jq '.comments[] | select(.body | contains("comment-tag: pytest_results")) | .id' | head -n 1)
 
-          # 2. Dynamic Update (Upsert) Logic
           if [ -n "\$EXISTING_COMMENT" ]; then
             echo "Found existing comment ID: \$EXISTING_COMMENT. Updating it..."
-            gh api -X PATCH "repos/${{ github.repository }}/issues/comments/EXISTING_COMMENT" -F body=@pytest-report.md
+            gh api -X PATCH "repos/\({{ github.repository }}/issues/comments/\)EXISTING_COMMENT" -F body=@pytest-report.md
           else
             echo "No existing comment found. Creating a new one..."
             gh pr comment \${{ github.event.pull_request.number }} --body-file=pytest-report.md
