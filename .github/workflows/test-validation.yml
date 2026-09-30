@@ -82,28 +82,6 @@ jobs:
           pytest --junitxml=junit-report.xml --md-report --md-report-output test-summary.md
           pytest --json-report --json-report-file=pytest-report.json
         continue-on-error: true
-      
-      - name: Checkout PR Head for Ledger Push
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
-
-          clean: false 
-      
-      - name: Update Test Ledger Table
-        run: python update_ledger.py
-
-      - name: Commit and Push Updated Ledger
-        env:
-          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@://github.com"
-          git add TEST_HISTORY.md
-          git commit -m "chore(ci): update TEST_HISTORY.md with run results" || echo "No changes to commit"
-          git fetch origin "$PR_BRANCH"
-          git push origin HEAD:"$PR_BRANCH"
 
       - name: Archive Test Logs
         uses: actions/upload-artifact@v4
