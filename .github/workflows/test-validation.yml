@@ -95,10 +95,10 @@ jobs:
           git push
 
       - name: Archive Test Logs
-          uses: actions/upload-artifact@v4
-          with:
-            name: pytest-logs-build-${{ github.run_number }}
-            path: |
-              test-summary.md
-              junit-report.xml
-            retention-days: 90 
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-logs-build-${{ github.run_number }}
+          path: |
+            test-summary.md
+            junit-report.xml
+          retention-days: 90
