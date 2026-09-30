@@ -28,3 +28,13 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
+
+repos:
+  - repo: local
+    hooks:
+      - id: update-local-ledger
+        name: Update Living Test History Table
+        entry: bash -c "pytest --json-report --json-report-file=pytest-report.json && python update_ledger.py && git add TEST_HISTORY.md"
+        language: system
+        pass_filenames: false
+        always_run: true
