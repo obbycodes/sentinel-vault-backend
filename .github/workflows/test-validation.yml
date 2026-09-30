@@ -6,7 +6,7 @@ on:
 
 permissions:
   pull-requests: write
-  contents: read
+  contents: write
 
 jobs:
   test:
@@ -95,12 +95,15 @@ jobs:
         run: python update_ledger.py
 
       - name: Commit and Push Updated Ledger
+        env:
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@://github.com"
           git add TEST_HISTORY.md
           git commit -m "chore(ci): update TEST_HISTORY.md with run results [skip ci]" || echo "No changes to commit"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          git fetch origin "$PR_BRANCH"
+          git push origin HEAD:"$PR_BRANCH"
 
       - name: Archive Test Logs
         uses: actions/upload-artifact@v4
