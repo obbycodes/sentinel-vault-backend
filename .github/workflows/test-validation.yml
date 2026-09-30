@@ -1,85 +1,69 @@
-name: Automated Testing & Audit Logs
+name: CI Pipeline
 
 on:
-  push:
-    branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main, dev ]
+
+permissions:
+  pull-requests: write
+  contents: read
 
 jobs:
-  run-tests:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-python-version: '3.11'
-    
-    - name: Mount Local Code & Python Modules
-      run: |
-        unset PIP_REQUIRE_HASHES
-        unset PIP_ONLY_BINARY
-        python -m pip install --no-deps -e .
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
+      - name: Install Dependencies
+        run: |
+          pip install pytest pytest-md-report
 
-    - name: Install dependencies
-      run: |
-        export PIP_REQUIRE_HASHES=true
-        export PIP_ONLY_BINARY=:all:
-        python -m pip install --no-deps -r ci-tools.txt
-        python -m pip install --no-deps -r requirements.txt
+      - name: Run Pytest & Generate MD Log
+        run: |
+          set +e
+          pytest --md-report \
+            --md-report-output pytest-report.md \
+            --md-report-flavor gfm \
+            --md-report-results \
+            --md-report-exclude-outcomes skipped,xfailed,xpassed
+          PYTEST_EXIT_CODE=\$?
+          set -e
 
-    - name: Run automated tests
-      run: |
-        mkdir -p test-results
-        pytest --junitxml=test-results/report.xml
-      
+          if [ \$PYTEST_EXIT_CODE -eq 0 ]; then
+            HEADER="### ✅ Automated Test Results: PASSED\n\n> [!NOTE]\n> All backend authentication and security tests have successfully passed in this run.\n"
+          else
+            HEADER="### ❌ Automated Test Results: FAILED\n\n> [!CAUTION]\n> Some tests have failed in this run. Review the details in the table below to debug the authentication pipeline.\n"
+          fi
+          sed -i "1i \$HEADER" pytest-report.md
 
-    - name: Run Pytest & Generate MD Log
-      run: |
-        set +e
-        pytest --md-report \
-          --md-report-output pytest-report.md \
-          --md-report-flavor gfm \
-          --md-report-verbose 1 \
-          --md-report-exclude-outcomes skipped,xfailed,xpassed
-        PYTEST_EXIT_CODE=$?
-        set -e
+          # Append a professional footer with the short commit SHA
+          SHORT_SHA=(echo "{{ github.sha }}" | cut -c1-7)
+          echo -e "\n---\n*Report generated natively for commit: \`$SHORT_SHA\`*" >> pytest-report.md
 
-        if [ $PYTEST_EXIT_CODE -eq 0 ]; then
-          # SUCCESS CASE
-          HEADER="### ✅ Automated Test Results: PASSED\n\n> [!NOTE]\n> All backend authentication and security tests have successfully passed in this run.\n"
-        else
-          # FAILURE CASE
-          HEADER="### ❌ Automated Test Results: FAILED\n\n> [!CAUTION]\n> Some or all tests have failed in this run. Review the details in the table below to debug the authentication pipeline.\n"
-        fi
+          # Append our unique hidden tag so the CLI can find this comment later
+          echo -e "\n<!-- comment-tag: pytest_results -->" >> pytest-report.md
 
-        sed -i "1i $HEADER" pytest-report.md
+          exit \$PYTEST_EXIT_CODE
 
-        SHORT_SHA=(echo "{{ github.sha }}" | cut -c1-7)
-        echo -e "\n---\n*Report generated for commit: \`$SHORT_SHA\`*" >> pytest-report.md
+      - name: Post Report to PR
+        if: always()
+        env:
+          GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 1. Look for a comment on this PR that contains our unique hidden tag
+          EXISTING_COMMENT=(gh pr view {{ github.event.pull_request.number }} --json comments --jq '.comments[] | select(.body | contains("comment-tag: pytest_results")) | .id' | head -n 1)
 
-        exit $PYTEST_EXIT_CODE
-
-
-    - name: Post Report to PR
-      if: always()
-      uses: thollander/actions-comment-pull-request@24bffb9b472ba05a4f3f77933840a6a841d1b32b
-      with:
-        file-path: pytest-report.md
-        comment-tag: pytest_results
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        mode: upsert
-        create-if-not-exists: true
-
-    - name: Archive Test Log Artifacts
-      if: always() 
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-execution-logs-${{ github.run_number }}
-        path: test-results/
-        retention-days: 30
+          # 2. Dynamic Update (Upsert) Logic
+          if [ -n "\$EXISTING_COMMENT" ]; then
+            echo "Found existing comment ID: \$EXISTING_COMMENT. Updating it..."
+            gh api -X PATCH "repos/${{ github.repository }}/issues/comments/EXISTING_COMMENT" -F body=@pytest-report.md
+          else
+            echo "No existing comment found. Creating a new one..."
+            gh pr comment \${{ github.event.pull_request.number }} --body-file=pytest-report.md
+          fi
