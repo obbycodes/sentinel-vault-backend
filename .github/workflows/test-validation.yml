@@ -55,7 +55,7 @@ jobs:
           
           sed -i "1i \$HEADER" pytest-report.md
 
-          SHORT_SHA=(echo "{{ github.sha }}" | cut -c1-7)
+          SHORT_SHA=\$(echo "{{ github.sha }}" | cut -c1-7)
           echo -e "\n---\n*Report generated natively for commit: \`$SHORT_SHA\`*" >> pytest-report.md
 
           echo -e "\n<!-- comment-tag: pytest_results -->" >> pytest-report.md
