@@ -44,8 +44,7 @@ jobs:
             --md-report-flavor gfm \
             --md-report-verbose 1 \
             --md-report-exclude-outcomes skipped,xfailed,xpassed \
-            --cov=. --cov-report=term \
-            > pytest-console.log
+            --cov=. --cov-report=term --cov-report=json
           PYTEST_EXIT_CODE=$?
           set -e
 
