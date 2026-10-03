@@ -44,23 +44,39 @@ jobs:
             --md-report-flavor gfm \
             --md-report-verbose 1 \
             --md-report-exclude-outcomes skipped,xfailed,xpassed
+            --cov=. --cov-report=term > pytest-console.log
           PYTEST_EXIT_CODE=$?
           set -e
+
+          COVERAGE_PERCENT=$(grep "TOTAL" pytest-console.log | awk 'print NF')
+          COVERAGE_PERCENT=${COVERAGE_PERCENT:-"Unknown"}
 
           if [ "$PYTEST_EXIT_CODE" -eq 0 ]; then
             echo "### ✅ Automated Test Results: PASSED" >> pytest-report.tmp
             echo "---" >> pytest-report.tmp
             echo "> [!NOTE]" >> pytest-report.tmp
             echo "> All backend authentication and security tests have successfully passed in this run." >> pytest-report.tmp
+            echo "> **Code Coverage:** \`$COVERAGE_PERCENT\`" >> pytest-report.tmp
           else
             echo "### ❌ Automated Test Results: FAILED" >> pytest-report.tmp
             echo "---" >> pytest-report.tmp
             echo "> [!CAUTION]" >> pytest-report.tmp
             echo "> Some tests have failed in this run. Review the details in the table below to debug the authentication pipeline." >> pytest-report.tmp
+            echo "> **Code Coverage:** \`$COVERAGE_PERCENT\`" >> pytest-report.tmp
           fi
+
+          echo "---" >> pytest-report.tmp
 
           cat pytest-report.md >> pytest-report.tmp
           mv pytest-report.tmp pytest-report.md
+
+          SHORT_SHA=$(echo "{{ github.sha }}" | cut -c1-7)
+          echo "---" >> pytest-report.md
+          echo -e "Report generated natively for commit: \`$SHORT_SHA\`" >> pytest-report.md
+
+          echo -e "\n<!-- comment-tag: pytest_results -->" >> pytest-report.md
+
+          exit $PYTEST_EXIT_CODE
 
       - name: Post Report to PR
         if: always()
