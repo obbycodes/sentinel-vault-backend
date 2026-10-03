@@ -74,9 +74,9 @@ jobs:
           cat pytest-report.md >> pytest-report.tmp
           mv pytest-report.tmp pytest-report.md
 
-          SHORT_SHA=$(echo "{{ github.sha }}" | cut -c1-7)
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
           echo "---" >> pytest-report.md
-          echo -e "Report generated natively for commit: \`$SHORT_SHA\`" >> pytest-report.md
+          echo -e "Report generated natively for commit: \`$SHORT_SHA\`*" >> pytest-report.md
 
           echo -e "\n<!-- comment-tag: pytest_results -->" >> pytest-report.md
 
