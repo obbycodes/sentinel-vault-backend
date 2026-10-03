@@ -48,21 +48,19 @@ jobs:
           set -e
 
           if [ "$PYTEST_EXIT_CODE" -eq 0 ]; then
-            HEADER=\$"### ✅ Automated Test Results: PASSED\n\n> [!NOTE]\n> All backend authentication and security tests have successfully passed in this run.\n"
+            echo "### ✅ Automated Test Results: PASSED" >> pytest-report.tmp
+            echo "---" >> pytest-report.tmp
+            echo "> [!NOTE]" >> pytest-report.tmp
+            echo "> All backend authentication and security tests have successfully passed in this run." >> pytest-report.tmp
           else
-            HEADER=\$"### ❌ Automated Test Results: FAILED\n\n> [!CAUTION]\n> Some tests have failed in this run. Review the details in the table below to debug the authentication pipeline.\n"
+            echo "### ❌ Automated Test Results: FAILED" >> pytest-report.tmp
+            echo "---" >> pytest-report.tmp
+            echo "> [!CAUTION]" >> pytest-report.tmp
+            echo "> Some tests have failed in this run. Review the details in the table below to debug the authentication pipeline." >> pytest-report.tmp
           fi
-          
-          echo "$HEADER" > pytest-report.tmp
+
           cat pytest-report.md >> pytest-report.tmp
           mv pytest-report.tmp pytest-report.md
-
-          SHORT_SHA=$(echo "\${{ github.sha }}" | cut -c1-7)
-          echo -e "\n---\n*Report generated natively for commit: \`$SHORT_SHA\`*" >> pytest-report.md
-
-          echo -e "\n<!-- comment-tag: pytest_results -->" >> pytest-report.md
-
-          exit $PYTEST_EXIT_CODE
 
       - name: Post Report to PR
         if: always()
