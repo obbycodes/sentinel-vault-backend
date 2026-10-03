@@ -1,0 +1,113 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches: [ main, dev ]
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Secure Production & Testing Packages
+        run: |
+          export PIP_REQUIRE_HASHES=true
+          export PIP_ONLY_BINARY=:all:
+          python -m pip install --no-deps -r requirements.txt
+          python -m pip install --no-deps -r ci-tools.txt
+        
+
+      - name: Mount Local Code and Discover Source Modules
+        run: |
+          unset PIP_REQUIRE_HASHES
+          unset PIP_ONLY_BINARY
+          python -m pip install --no-deps -e .
+          
+
+      - name: Run Pytest & Generate MD Log
+        run: |
+          PYTEST_EXIT_CODE=0
+          set +e
+          pytest --md-report \
+            --md-report-output pytest-report.md \
+            --md-report-flavor gfm \
+            --md-report-verbose 1 \
+            --md-report-exclude-outcomes skipped,xfailed,xpassed \
+            --cov=. --cov-report=term --cov-report=json
+          PYTEST_EXIT_CODE=$?
+          set -e
+
+          if [ -f "coverage.json" ]; then
+            COVERAGE_PERCENT=$(jq '.totals.percent_covered | floor' coverage.json)
+            COVERAGE_PERCENT="${COVERAGE_PERCENT}%"
+          else
+            COVERAGE_PERCENT="Unknown"
+          fi
+
+          if [ "$PYTEST_EXIT_CODE" -eq 0 ]; then
+            echo "### ✅ Automated Test Results: PASSED" >> pytest-report.tmp
+            echo "---" >> pytest-report.tmp
+            echo "> [!NOTE]" >> pytest-report.tmp
+            echo "> All backend authentication and security tests have successfully passed in this run." >> pytest-report.tmp
+            echo "> **Code Coverage:** \`$COVERAGE_PERCENT\`" >> pytest-report.tmp
+          else
+            echo "### ❌ Automated Test Results: FAILED" >> pytest-report.tmp
+            echo "---" >> pytest-report.tmp
+            echo "> [!CAUTION]" >> pytest-report.tmp
+            echo "> Some tests have failed in this run. Review the details in the table below to debug the authentication pipeline." >> pytest-report.tmp
+            echo "> **Code Coverage:** \`$COVERAGE_PERCENT\`" >> pytest-report.tmp
+          fi
+
+          echo "---" >> pytest-report.tmp
+
+          cat pytest-report.md >> pytest-report.tmp
+          mv pytest-report.tmp pytest-report.md
+
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          echo "---" >> pytest-report.md
+          echo -e "Report generated natively for commit: \`$SHORT_SHA\`*" >> pytest-report.md
+
+          echo -e "\n<!-- comment-tag: pytest_results -->" >> pytest-report.md
+
+          exit $PYTEST_EXIT_CODE
+
+      - name: Post Report to PR
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          EXISTING_COMMENT=$(gh pr view ${{ github.event.pull_request.number }} --json comments --jq '.comments[] | select(.body | contains("comment-tag: pytest_results")) | .databaseId' | head -n 1)
+
+          if [ -n "$EXISTING_COMMENT" ]; then
+            echo "Found existing comment ID: $EXISTING_COMMENT. Updating it..."
+            gh api -X PATCH "repos/${{ github.repository }}/issues/comments/$EXISTING_COMMENT" -F body=@pytest-report.md
+          else
+            echo "No existing comment found. Creating a new one..."
+            gh pr comment ${{ github.event.pull_request.number }} --body-file=pytest-report.md
+          fi
+    
+      - name: Run Pytest
+        run: |
+          pytest --junitxml=junit-report.xml --md-report --md-report-output test-summary.md
+          pytest --json-report --json-report-file=pytest-report.json
+        continue-on-error: true
+
+      - name: Archive Test Logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-logs-build-${{ github.run_number }}
+          path: |
+            test-summary.md
+            junit-report.xml
+          retention-days: 90
