@@ -48,14 +48,16 @@ jobs:
           set -e
 
           if [ "$PYTEST_EXIT_CODE" -eq 0 ]; then
-            HEADER="### ✅ Automated Test Results: PASSED\n\n> [!NOTE]\n> All backend authentication and security tests have successfully passed in this run.\n"
+            HEADER=\$"### ✅ Automated Test Results: PASSED\n\n> [!NOTE]\n> All backend authentication and security tests have successfully passed in this run.\n"
           else
-            HEADER="### ❌ Automated Test Results: FAILED\n\n> [!CAUTION]\n> Some tests have failed in this run. Review the details in the table below to debug the authentication pipeline.\n"
+            HEADER=\$"### ❌ Automated Test Results: FAILED\n\n> [!CAUTION]\n> Some tests have failed in this run. Review the details in the table below to debug the authentication pipeline.\n"
           fi
           
-          sed -i "1i \$HEADER" pytest-report.md
+          echo "\$HEADER" > pytest-report.tmp
+          cat pytest-report.md >> pytest-report.tmp
+          mv pytest-report.tmp pytest-report.md
 
-          SHORT_SHA=$(echo "{{ github.sha }}" | cut -c1-7)
+          SHORT_SHA=$(echo "\${{ github.sha }}" | cut -c1-7)
           echo -e "\n---\n*Report generated natively for commit: \`$SHORT_SHA\`*" >> pytest-report.md
 
           echo -e "\n<!-- comment-tag: pytest_results -->" >> pytest-report.md
