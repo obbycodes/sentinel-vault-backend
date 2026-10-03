@@ -43,13 +43,18 @@ jobs:
             --md-report-output pytest-report.md \
             --md-report-flavor gfm \
             --md-report-verbose 1 \
-            --md-report-exclude-outcomes skipped,xfailed,xpassed
-            --cov=. --cov-report=term > pytest-console.log
+            --md-report-exclude-outcomes skipped,xfailed,xpassed \
+            --cov=. --cov-report=term \
+            > pytest-console.log
           PYTEST_EXIT_CODE=$?
           set -e
 
-          COVERAGE_PERCENT=$(grep "TOTAL" pytest-console.log | awk 'print NF')
-          COVERAGE_PERCENT=${COVERAGE_PERCENT:-"Unknown"}
+          if [ -f "coverage.json" ]; then
+            COVERAGE_PERCENT=$(jq '.totals.percent_covered | floor' coverage.json)
+            COVERAGE_PERCENT="${COVERAGE_PERCENT}%"
+          else
+            COVERAGE_PERCENT="Unknown"
+          fi
 
           if [ "$PYTEST_EXIT_CODE" -eq 0 ]; then
             echo "### ✅ Automated Test Results: PASSED" >> pytest-report.tmp
