@@ -53,7 +53,7 @@ jobs:
             HEADER=\$"### ❌ Automated Test Results: FAILED\n\n> [!CAUTION]\n> Some tests have failed in this run. Review the details in the table below to debug the authentication pipeline.\n"
           fi
           
-          echo "\$HEADER" > pytest-report.tmp
+          echo "$HEADER" > pytest-report.tmp
           cat pytest-report.md >> pytest-report.tmp
           mv pytest-report.tmp pytest-report.md
 
