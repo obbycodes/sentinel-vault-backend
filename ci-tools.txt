@@ -218,6 +218,10 @@ colorama==0.4.6 \
     #   mkdocs
     #   mkdocs-material
     #   pytest
+detect-secrets==1.5.0 \
+    --hash=sha256:6bb46dcc553c10df51475641bb30fd69d25645cc12339e46c824c1e0c388898a \
+    --hash=sha256:e24e7b9b5a35048c313e983f76c4bd09dad89f045ff059e354f9943bf45aa060
+    # via -r ci-tools.in
 coverage[toml]==7.16.2 \
     --hash=sha256:00d3eb96e9988c45f50cccd1f1496571ac5c1f91386ac02c4d55516eeda19a24 \
     --hash=sha256:01c6908bc613b420c26c818fe948e1b97dfd041a53c98b01c63bd8321f5c9aae \
@@ -689,6 +693,7 @@ pyyaml==6.0.3 \
     --hash=sha256:fc09d0aa354569bc501d4e787133afc08552722d3ab34836a80547331bb5d4a0
     # via
     #   bandit
+    #   detect-secrets
     #   mkdocs
     #   mkdocs-get-deps
     #   pre-commit
@@ -701,7 +706,9 @@ pyyaml-env-tag==1.1 \
 requests==2.34.2 \
     --hash=sha256:2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0 \
     --hash=sha256:f288924cae4e29463698d6d60bc6a4da69c89185ad1e0bcc4104f584e960b9ed
-    # via mkdocs-material
+    # via
+    #   detect-secrets
+    #   mkdocs-material
 rich==15.0.0 \
     --hash=sha256:33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb \
     --hash=sha256:edd07a4824c6b40189fb7ac9bc4c52536e9780fbbfbddf6f1e2502c31b068c36
