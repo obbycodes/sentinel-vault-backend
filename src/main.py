@@ -244,31 +244,26 @@ def telemetry_query(
 
 
 @app.get("/api/telemetry/stats")
-def get_telemetry_stats(db: DbSession, current_user: AuthenticatedUser):
-    total_records = db.query(func.count(models.DeviceTelemetryLog.id)).scalar() or 0
-    total_devices = (
-        db.query(
-            func.count(func.distinct(models.DeviceTelemetryLog.device_id))
-        ).scalar()
-        or 0
-    )
-    avg_cpu = db.query(func.avg(models.DeviceTelemetryLog.cpu_usage)).scalar() or 0
-    avg_memory = (
-        db.query(func.avg(models.DeviceTelemetryLog.memory_usage)).scalar() or 0
-    )
-    anomaly_count = (
+def get_telemetry_stats(db: DbSession, current_user: PrivilegedUser):
+    metrics = (
+        db.query(func.count(models.DeviceTelemetryLog.id)).label("total_records"),
+        db.query(func.count(func.distinct(models.DeviceTelemetryLog.device_id))).label(
+            "total_devices"
+        ),
+        db.query(func.avg(models.DeviceTelemetryLog.cpu_usage)).label("avg_cpu_usage"),
+        db.query(func.avg(models.DeviceTelemetryLog.memory_usage)).label(
+            "avg_ram_usage"
+        ),
         db.query(
             func.count(models.DeviceTelemetryLog.id).filter(
-                models.DeviceTelemetryLog == "CRITICAL"
+                models.DeviceTelemetryLog.status == "CRITICAL"
             )
-        ).scalar()
-        or 0
-    )
-
+        ).label("anomalies"),
+    ).first()
     return {
-        "total_records": total_records,
-        "total_devices": total_devices,
-        "avg_cpu_usage": avg_cpu,
-        "avg_ram_usage": avg_memory,
-        "anomalies": anomaly_count,
+        "total_records": metrics.total_records or 0,
+        "total_devices": metrics.total_devices or 0,
+        "avg_cpu_usage": metrics.avg_cpu_usage or 0,
+        "avg_ram_usage": metrics.avg_ram_usage or 0,
+        "anomalies": metrics.anomalies or 0,
     }

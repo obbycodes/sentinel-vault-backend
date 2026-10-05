@@ -1,0 +1,74 @@
+name: CI Quality Checks
+
+on:
+  push:
+    branches: [ "main", "master", "chore/pytest" ]
+  pull_request:
+    branches: [ "main", "master", "chore/pytest" ]
+
+jobs:
+  unit-testing:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v7
+
+    - name: Set Up Python Environment
+      uses: actions/setup-python@v7
+      with:
+        python-version: '3.11'
+
+    - name: Upgrade Pip Securely using Locked Hashes
+      run: |
+        export PIP_REQUIRE_HASHES=true
+        export PIP_ONLY_BINARY=:all:
+        python -m pip install --no-deps -r ci-tools.txt
+  
+    - name: Install Secure Production & Testing Packages
+      run: |
+        export PIP_REQUIRE_HASHES=true
+        export PIP_ONLY_BINARY=:all:
+        python -m pip install --no-deps -r requirements.txt
+        python -m pip install --no-deps -r ci-tools.txt
+
+    - name: Mount Local Code and Discover Source Modules
+      run: |
+        unset PIP_REQUIRE_HASHES
+        unset PIP_ONLY_BINARY
+        python -m pip install --no-deps -e .
+
+    - name: Execute Automated Security Tests
+      env:
+        secret_key: ${{ secrets.TEST_SECRET_KEY }}
+      run: |
+        pytest --maxfail=1 --disable-warnings
+
+  quality-control:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v7
+
+    - name: Set up Python
+      uses: actions/setup-python@v7
+      with:
+        python-version: '3.11'
+
+    - name: Install Secure Production & Quality Control Packages
+      run: |
+        export PIP_REQUIRE_HASHES=true
+        export PIP_ONLY_BINARY=:all:
+        python -m pip install --no-deps -r requirements.txt
+        python -m pip install --no-deps -r ci-tools.txt
+        
+
+    - name: Run Ruff Formatter (Black style)
+      run: ruff format --check .
+
+    - name: Run Ruff Linter
+      run: ruff check .
+
+    - name: Run Bandit Security Scanner
+      run: python -m bandit -r . -c pyproject.toml

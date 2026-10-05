@@ -3,4 +3,8 @@ temp/
 __pycache__/
 .env
 venv/
-
+*.egg-info/
+.editable.*/
+build/
+dist/
+*.db
