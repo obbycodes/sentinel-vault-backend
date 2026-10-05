@@ -1,0 +1,37 @@
+name: "Architectural Decision Request"
+description: Propose an architectural decision within this project.
+title: "ADR [XXXX]: "
+labels: ["architecture"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please state your architectural decision below in detail.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What technical or operational challenge are we trying to solve? Why now?
+      description: A clear and concise description of what the problem or limitation is. (e.g., "Performance bottlenecks, security concern, vulnerability...")
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the solution you propose that solves the challenge above.
+      description: A clear and concise description of what you want to happen as a result of this implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Describe alternatives you've considered and why you've decided this architecture over others.
+      description: Any alternative solutions or features you've thought about, and why this is the ultimate choice.
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any other context, mockup designs, architecture diagrams or user flows here.
+    validations:
+      required: false

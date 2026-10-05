@@ -1,0 +1,34 @@
+name: Update Test Ledger on Merge
+
+on:
+  pull_request:
+    branches: [ main ]
+    types: [ closed ]
+
+jobs:
+  update-ledger:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          token: ${{ secrets.LEDGER_TOKEN }}
+
+      - name: Update Test History Ledger
+        run: |
+          git config --local user.email "github-actions[bot]@://github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          python update_ledger.py
+          echo "- PR #${{ github.event.pull_request.number }} merged at $(date)" >> TEST_HISTORY.md
+          
+          git add TEST_HISTORY.md
+          git commit -m "chore(ci): update TEST_HISTORY.md with merge results"
+          
+          git push origin main
