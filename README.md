@@ -10,29 +10,29 @@ An asynchronous, containerised, near-production-grade telemetry engine built usi
 
 ---
 
-## 🗺️ System Architecture Blueprint
+## System Architecture Blueprint
 
 This diagram illustrates how code changes are statically validated via GitHub Actions before deployment, while showing the runtime path of real-time client telemetry payloads streaming through our application layers.
 
 ```mermaid
 graph TD
     %% Runtime Data Flow (The Real-Time Telemetry Route)
-    A[🔒 External Asset / Client] -->|1. Async HTTP Payload| B(🚀 Uvicorn Server)
-    B -->|2. Ingests Raw Data| C{⚡ FastAPI Application}
-    C -->|3. Type Enforcement| D[🛡️ Pydantic Sanitisation Engine]
-    D -->|4. Parameterised Queries| E[(🗄️ SQLite Database Ledger)]
+    A[External Asset / Client] -->|1. Async HTTP Payload| B(Uvicorn Server)
+    B -->|2. Ingests Raw Data| C{FastAPI Application}
+    C -->|3. Type Enforcement| D[Pydantic Sanitisation Engine]
+    D -->|4. Parameterised Queries| E[(SQLite Database Ledger)]
 
     %% DevSecOps & Governance Perimeter (The Static Gating Route)
     subgraph GitHub Actions CI/CD Pipeline Gate
-        F[⚓ Pre-Commit Hooks] -->|Local Check| H{Build/Test Success?}
-        G[🔍 Bandit SAST & SonarQube] -->|Remote PR Scan| H
+        F[Pre-Commit Hooks] -->|Local Check| H{Build/Test Success?}
+        G[Bandit SAST & SonarQube] -->|Remote PR Scan| H
         H -->|YES: Merge Permitted| C
-        H -->|NO: Hard Fail / Block Deploy| X[❌ Code Integration Rejected]
+        H -->|NO: Hard Fail / Block Deploy| X[Code Integration Rejected]
     end
 
     %% Infrastructure Boundary
     subgraph Docker Isolation Boundary
-        I[🐳 Non-Root appuser Execution Mode] -.-> B
+        I[Non-Root appuser Execution Mode] -.-> B
         I -.-> C
     end
 
