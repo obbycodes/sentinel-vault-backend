@@ -19,7 +19,7 @@ class User(Base):
 class UserTelemetryLog(Base):
     __tablename__ = "telemetry_logs"
     id = Column[int](Integer, primary_key=True, index=True)
-    user_id = Column[str](String, ForeignKey("users.id"), index=True)
+    user_id = Column[int](Integer, ForeignKey("users.id"), index=True)
     event_type = Column[str](String, index=True)
     description = Column[str](String, nullable=False)
     timestamp = Column[datetime](DateTime, default=lambda: datetime.now(timezone.utc))
