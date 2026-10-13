@@ -25,6 +25,9 @@ COPY --from=builder --chown=appuser:appgroup /root/.local /home/appuser/.local
 
 COPY --chown=appuser:appgroup ./src ./src
 
+RUN mkdir -p /app/data && \
+    chown -R appuser:appgroup /app/data
+
 USER appuser
 
 EXPOSE 8000
