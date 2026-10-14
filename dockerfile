@@ -4,7 +4,7 @@ WORKDIR /build
 
 COPY requirements.txt .
 
-RUN pip install --no-cache-dir --user -r requirements.txt
+RUN pip install --no-cache-dir --only-binary=:all: --user -r requirements.txt
 
 
 
