@@ -10,7 +10,7 @@ if not os.path.exists(JSON_REPORT):
     print(f"Error: {JSON_REPORT} not found.")
     sys.exit(1)
 
-with open(JSON_REPORT, "r") as f:
+with open(JSON_REPORT, "r", encoding="utf-8") as f:
     data = json.load(f)
 
 summary = data.get("summary", {})
@@ -37,7 +37,10 @@ trigger_text = (
 new_row = f"| {timestamp} | {trigger_text} | {passed} | {failed} | {skipped} | {total} | {status} |\n"
 
 # 3. Append row to the ledger
-with open(LEDGER_FILE, "a") as f:
+with open(LEDGER_FILE, "a", encoding="utf-8") as f:
     f.write(new_row)
 
-print(f"Successfully appended test run to {LEDGER_FILE}")
+if os.path.exists(JSON_REPORT):
+    os.remove(JSON_REPORT)
+
+print(f"Successfully appended test run to {LEDGER_FILE} and cleaned up artifacts.")

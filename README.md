@@ -110,8 +110,7 @@ For the full workflow diagram, please click here.
 • **Escaping the "Vibe Coder" Trap (AI Governance):** At the project's inception, I fell into the trap of blindly delegating high-level architectural decisions and system topology generation to AI models. I quickly recognized this neutralized my own critical thinking and compromised structural ownership. I aggressively pivoted my workflow to act as the System Architect and Security Lead, restricting AI strictly to a junior pair-programming role focused on boilerplate synthesis and test skeleton generation. This shift forced me to master core Python async paradigms and actively own our AppSec boundaries.
 • **The Fragility of Manual Verification (The Shift to Automated Ledgers):** I initially attempted to manually test features, verification loops, and log structures during development. This process quickly introduced severe traceability and auditability flaws, resulting in inconsistent data capture, missed test logging, and high repudiation risks. To neutralize this, I engineered our automated testing ledger pipeline. Transitioning to automated Pytest execution blocks code commits on a hard-fail basis if regressions occur, while programmatically appending execution metrics directly to a tamper-resistant Markdown history ledger.
 • **The Criticality of Log Sanitisation (CWE-532):** During an architectural audit of our authentication endpoints, I identified a major security risk: passing the raw credential payloads directly into the Uvicorn logger exposed plain text user passwords to database traces if authentication failed. This critical find taught me that security is a continuous engineering lifecycle discipline, resulting in an active backlog issue to implement strict output sanitization masks before logs hit disk storage.
-• T**he Trap of Over-Engineering (STRIDE Framework Analysis):** Attempting to conduct fine-grained, feature-level STRIDE threat profiling for every minor code iteration quickly caused analysis paralysis. I refactored our security methodology to focus on a Component-Based Threat Modeling strategy—isolating our Ingestion, Persistence, and Infrastructure threat vectors while using Bandit SAST to handle automated syntax auditing continuously.
-
+• **The Trap of Over-Engineering (STRIDE Framework Analysis):** Attempting to conduct fine-grained, feature-level STRIDE threat profiling for every minor code iteration quickly caused analysis paralysis. I refactored our security methodology to focus on a Component-Based Threat Modeling strategy—isolating our Ingestion, Persistence, and Infrastructure threat vectors while using Bandit SAST to handle automated syntax auditing continuously.
 
 ---
 
@@ -134,10 +133,10 @@ docker-compose up --build -d
 *   [x] Establish SonarQube Cloud SAST hooks within the active CI/CD cycle.
 *   [ ] Implement an asynchronous event-streaming broker layer (Redis/RabbitMQ) to manage distributed message queues under heavy network load.
 
-For more proposed/ongoing changes, please see our project's **issues and pull requests.**
-
 ### Project Milestones
 * **August - October**: Initial Development Phase & Parallel Learning
 * **6 October - 14 October**: Tech/Security Debt Recovery + Containerisation
 * **14 October - 26 October**: Development Break
 * **27 October - TBC**: Development Phase & Further Parallel Learning
+
+For more proposed/ongoing changes, please see our project's **issues and pull requests.**
