@@ -24,7 +24,7 @@ repos:
     hooks:
       - id: run-pytest-md
         name: Generate Local Test Log
-        entry: pytest --md-report --md-report-output pytest-report.md
+        entry: bash -c "APP_ENV=testing pytest --md-report --md-report-output pytest-report.md"
         language: system
         pass_filenames: false
         always_run: true
@@ -34,7 +34,7 @@ repos:
     hooks:
       - id: update-local-ledger
         name: Update Living Test History Table
-        entry: bash -c "pytest --json-report --json-report-file=pytest-report.json && python update_ledger.py && git add TEST_HISTORY.md"
+        entry: bash -c "APP_ENV=testing pytest --json-report --json-report-file=pytest-report.json && python update_ledger.py && git add TEST_HISTORY.md"
         language: system
         pass_filenames: false
         always_run: true

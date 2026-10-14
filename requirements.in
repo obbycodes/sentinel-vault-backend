@@ -9,3 +9,5 @@ joserfc
 pwdlib
 pwdlib[argon2]
 httpx2
+psycopg2-binary 
+redis
