@@ -29,6 +29,11 @@ jobs:
 
           python -m pytest -p no:platformdirs --json-report --json-report-file=pytest-report.json
 
+      - name: Mount Local Code and Discover Source Modules
+        run: |
+          unset PIP_REQUIRE_HASHES
+          unset PIP_ONLY_BINARY
+          python -m pip install --no-deps -e .
           
 
       - name: Update Test History Ledger
