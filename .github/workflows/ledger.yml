@@ -19,6 +19,12 @@ jobs:
         with:
           ref: main
           token: ${{ secrets.LEDGER_TOKEN }}
+
+      - name: Mount Local Code and Discover Source Modules
+        run: |
+          unset PIP_REQUIRE_HASHES
+          unset PIP_ONLY_BINARY
+          python -m pip install --no-deps -e .
       
       - name: Install Secure Packages & Generate Report
         run: |
@@ -28,12 +34,6 @@ jobs:
           python -m pip install --no-deps -r requirements.txt
 
           python -m pytest -p no:platformdirs --json-report --json-report-file=pytest-report.json
-
-      - name: Mount Local Code and Discover Source Modules
-        run: |
-          unset PIP_REQUIRE_HASHES
-          unset PIP_ONLY_BINARY
-          python -m pip install --no-deps -e .
           
 
       - name: Update Test History Ledger
