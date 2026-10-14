@@ -63,7 +63,7 @@ jobs:
           git push origin "$BRANCH_NAME" --force
           
           # 5. Check if an active PR already exists; if not, open a new one natively
-          PR_EXISTS=$(gh pr list --head "$BRANCH_NAME" --json number --jq '.[0].number // empty' -r)
+          PR_EXISTS=$(gh pr list --head "$BRANCH_NAME" --json number --jq '.[0].number // empty')
 
           
           if [ -z "$PR_EXISTS" ]; then
