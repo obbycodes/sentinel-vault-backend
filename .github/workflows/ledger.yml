@@ -20,12 +20,16 @@ jobs:
           ref: main
           token: ${{ secrets.LEDGER_TOKEN }}
       
-      - name: Install Secure Packages
+      - name: Install Secure Packages & Generate Report
         run: |
           export PIP_REQUIRE_HASHES=true
           export PIP_ONLY_BINARY=:all:
           python -m pip install --no-deps -r ci-tools.txt
           python -m pip install --no-deps -r requirements.txt
+
+          python -m pytest --json-report --json-report-file=pytest-report.json
+
+          
 
       - name: Update Test History Ledger
         run: |
