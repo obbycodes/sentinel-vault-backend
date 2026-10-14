@@ -1,13 +1,14 @@
 name: Update Test Ledger on Merge
 
 on:
+  workflow_dispatch:
   pull_request:
     branches: [ main ]
     types: [ closed ]
 
 jobs:
   update-ledger:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true || github.event_name == "workflow_dispatch"
     runs-on: ubuntu-latest
     
     permissions:
