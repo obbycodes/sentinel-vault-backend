@@ -464,16 +464,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#this-project-uses-a-competent-based-stride-mitigation-strategy-which-means-the-system-is-analysed-based-on-the-attackers-competency-this-model-analyses-threats-considering-the-attacker-has-moderate-competency" class="md-nav__link">
+  <a href="#this-threat-model-implements-a-component-based-stride-analysis-assuming-that-the-attacker-posesses-medium-level-competency-hackerskilled-insider-this-varies-from-our-model-in-our-readme-which-only-analyses-components-based-on-primitive-threats" class="md-nav__link">
     <span class="md-ellipsis">
       
-        This project uses a competent-based STRIDE Mitigation strategy, which means the system is analysed based on the attacker's competency. This model analyses threats considering the attacker has moderate competency.
+        This threat model implements a component-based STRIDE analysis assuming that the attacker posesses medium-level competency (Hacker/Skilled Insider). This varies from our model in our README, which only analyses components based on primitive threats.
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="This project uses a competent-based STRIDE Mitigation strategy, which means the system is analysed based on the attacker&#39;s competency. This model analyses threats considering the attacker has moderate competency.">
+    <nav class="md-nav" aria-label="This threat model implements a component-based STRIDE analysis assuming that the attacker posesses medium-level competency (Hacker/Skilled Insider). This varies from our model in our README, which only analyses components based on primitive threats.">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unmitigated-threats-are-being-actively-mitigated-through-our-active-developer-backlog-for-more-detail-please-see-our-issues-pull-requests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unmitigated threats are being actively mitigated through our active developer backlog, for more detail, please see our Issues &amp; Pull Requests.
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#why-not-analyse-high-level-attackers" class="md-nav__link">
@@ -590,16 +601,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#this-project-uses-a-competent-based-stride-mitigation-strategy-which-means-the-system-is-analysed-based-on-the-attackers-competency-this-model-analyses-threats-considering-the-attacker-has-moderate-competency" class="md-nav__link">
+  <a href="#this-threat-model-implements-a-component-based-stride-analysis-assuming-that-the-attacker-posesses-medium-level-competency-hackerskilled-insider-this-varies-from-our-model-in-our-readme-which-only-analyses-components-based-on-primitive-threats" class="md-nav__link">
     <span class="md-ellipsis">
       
-        This project uses a competent-based STRIDE Mitigation strategy, which means the system is analysed based on the attacker's competency. This model analyses threats considering the attacker has moderate competency.
+        This threat model implements a component-based STRIDE analysis assuming that the attacker posesses medium-level competency (Hacker/Skilled Insider). This varies from our model in our README, which only analyses components based on primitive threats.
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="This project uses a competent-based STRIDE Mitigation strategy, which means the system is analysed based on the attacker&#39;s competency. This model analyses threats considering the attacker has moderate competency.">
+    <nav class="md-nav" aria-label="This threat model implements a component-based STRIDE analysis assuming that the attacker posesses medium-level competency (Hacker/Skilled Insider). This varies from our model in our README, which only analyses components based on primitive threats.">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unmitigated-threats-are-being-actively-mitigated-through-our-active-developer-backlog-for-more-detail-please-see-our-issues-pull-requests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unmitigated threats are being actively mitigated through our active developer backlog, for more detail, please see our Issues &amp; Pull Requests.
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#why-not-analyse-high-level-attackers" class="md-nav__link">
@@ -635,7 +657,8 @@
 
 
 <h1 id="threat-model">Threat Model</h1>
-<h3 id="this-project-uses-a-competent-based-stride-mitigation-strategy-which-means-the-system-is-analysed-based-on-the-attackers-competency-this-model-analyses-threats-considering-the-attacker-has-moderate-competency">This project uses a competent-based STRIDE Mitigation strategy, which means the system is analysed based on the attacker's competency. This model analyses threats considering the attacker has moderate competency.</h3>
+<h3 id="this-threat-model-implements-a-component-based-stride-analysis-assuming-that-the-attacker-posesses-medium-level-competency-hackerskilled-insider-this-varies-from-our-model-in-our-readme-which-only-analyses-components-based-on-primitive-threats">This threat model implements a component-based STRIDE analysis assuming that the attacker posesses medium-level competency (Hacker/Skilled Insider). This varies from our model in our README, which only analyses components based on primitive threats.</h3>
+<h4 id="unmitigated-threats-are-being-actively-mitigated-through-our-active-developer-backlog-for-more-detail-please-see-our-issues-pull-requests">Unmitigated threats are being actively mitigated through our active developer backlog, for more detail, please see our Issues &amp; Pull Requests.</h4>
 <p>• <strong>Spoofing: (Unmitigated)</strong> Due to the HTTPS flag being disabled (False), an attacker can perform a Man-in-the-Middle (MiTM) attack to capture unencrypted authentication tokens in transit. They can then use these stolen credentials to impersonate legitimate devices or users when communicating with the FastAPI backend.</p>
 <p>• <strong>Tampering: (Unmitigated)</strong> Attackers can exploit logical vulnerabilities within third-party FastAPI routers or flawed validation logic to manipulate structural API payloads, tamper with database records, or alter JWT claims.</p>
 <p>• <strong>Repudiation: (Unmitigated)</strong> Attackers may attempt to delete or alter telemetry ingestion logs (removing infection anomalies, login failures, or system events) to hide their tracks. This can be mitigated by streaming logs in real-time to an immutable, centralized logging platform that the FastAPI container cannot alter or delete.</p>
