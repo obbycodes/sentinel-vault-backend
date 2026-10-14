@@ -15,7 +15,11 @@ connect_args = {}
 if DATABASE_URL.startswith("sqlite"):
     connect_args = {"check_same_thread": False}
 
-IS_TESTING = os.getenv("APP_ENV") == "testing" or not DATABASE_URL or DATABASE_URL.startswith("sqlite")
+IS_TESTING = (
+    os.getenv("APP_ENV") == "testing"
+    or not DATABASE_URL
+    or DATABASE_URL.startswith("sqlite")
+)
 
 if IS_TESTING:
     if not DATABASE_URL:
@@ -38,7 +42,9 @@ for attempt in range(MAX_RETRIES):
         if attempt == MAX_RETRIES - 1:
             print(f"Database connection failed after {MAX_RETRIES} attempts.")
             raise e
-        print(f"Database container is booting up... Retrying in {RETRY_DELAY}s (Attempt {attempt + 1}/{MAX_RETRIES})")
+        print(
+            f"Database container is booting up... Retrying in {RETRY_DELAY}s (Attempt {attempt + 1}/{MAX_RETRIES})"
+        )
         time.sleep(RETRY_DELAY)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
