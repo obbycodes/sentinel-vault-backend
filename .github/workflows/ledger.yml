@@ -43,7 +43,7 @@ jobs:
           echo "- PR #${{ github.event.pull_request.number }} merged at $(date)" >> TEST_HISTORY.md
           
       - name: Create Automated Ledger Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@70a41afd78856ae021b678314ff34e681cb9430f
         with:
           token: ${{ secrets.LEDGER_TOKEN }}
           branch: automation/test-ledger-update
