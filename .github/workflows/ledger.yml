@@ -27,7 +27,7 @@ jobs:
           python -m pip install --no-deps -r ci-tools.txt
           python -m pip install --no-deps -r requirements.txt
 
-          python -m pytest --json-report --json-report-file=pytest-report.json
+          python -m pytest -p no:platformdirs --json-report --json-report-file=pytest-report.json
 
           
 
