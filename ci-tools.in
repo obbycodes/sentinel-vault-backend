@@ -10,3 +10,4 @@ pytest-md-report==0.8.0
 pre-commit==4.6.2
 pytest-json-report==1.5.0
 pytest-cov==7.1.0
+black==26.10.0

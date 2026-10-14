@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000" 
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PYTHONPATH=/app/src
+      - DATABASE_URL=postgres://user:password@db:5432/telemetry_db
+      - REDIS_URL=redis://cache:6379
+    depends_on:
+      - db
+      - cache
+    networks:
+      - recruitment-net
+
+  cache:
+    image: redis:7-alpine
+    restart: always
+    networks:
+      - recruitment-net
+
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=telemetry_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+    networks:
+      - recruitment-net
+
+volumes:
+  pgdata:
+
+networks:
+  recruitment-net:
+    driver: bridge
