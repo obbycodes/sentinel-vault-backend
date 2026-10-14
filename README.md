@@ -68,8 +68,8 @@ graph TD
 
 ### TCP/IP Layered Security
 
-• **Application Layer Security (HTTP/TLS):** Enforces data transit safety by configuring the FastAPI application to operate strictly over HTTPS (TLS), mitigating the risk of packet-sniffing or Man-in-the-Middle (MitM) interceptions at the Application layer.
-• **Transport Layer Boundary (TCP/Uvicorn):** Utilizes Uvicorn to handle low-level TCP socket connections asynchronously. The containerized ports are explicitly isolated so that external TCP traffic can only interface with the exposed application gateway, blocking unauthorized network scanning vectors.
+* **Application Layer Security (HTTP/TLS):** Enforces data transit safety by configuring the FastAPI application to operate strictly over HTTPS (TLS), mitigating the risk of packet-sniffing or Man-in-the-Middle (MitM) interceptions at the Application layer.
+* **Transport Layer Boundary (TCP/Uvicorn):** Utilizes Uvicorn to handle low-level TCP socket connections asynchronously. The containerized ports are explicitly isolated so that external TCP traffic can only interface with the exposed application gateway, blocking unauthorized network scanning vectors.
 
 
 ### Component-Based STRIDE Threat Model
