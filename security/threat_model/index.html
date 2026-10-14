@@ -13,8 +13,6 @@
       
       
       
-        <link rel="prev" href="../../architecture/database/">
-      
       
         <link rel="next" href="../test_logs/">
       
@@ -74,6 +72,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#threat-model" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -284,7 +287,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/token_signing/" class="md-nav__link">
+      <a href="../../architecture/token_signing.md" class="md-nav__link">
         
   
   
@@ -312,7 +315,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/database/" class="md-nav__link">
+      <a href="../../architecture/database.md" class="md-nav__link">
         
   
   
@@ -407,6 +410,26 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Threat Model
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -424,6 +447,53 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#this-project-uses-a-competent-based-stride-mitigation-strategy-which-means-the-system-is-analysed-based-on-the-attackers-competency-this-model-analyses-threats-considering-the-attacker-has-moderate-competency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        This project uses a competent-based STRIDE Mitigation strategy, which means the system is analysed based on the attacker's competency. This model analyses threats considering the attacker has moderate competency.
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="This project uses a competent-based STRIDE Mitigation strategy, which means the system is analysed based on the attacker&#39;s competency. This model analyses threats considering the attacker has moderate competency.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-not-analyse-high-level-attackers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why not analyse high-level attackers?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -510,6 +580,44 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#this-project-uses-a-competent-based-stride-mitigation-strategy-which-means-the-system-is-analysed-based-on-the-attackers-competency-this-model-analyses-threats-considering-the-attacker-has-moderate-competency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        This project uses a competent-based STRIDE Mitigation strategy, which means the system is analysed based on the attacker's competency. This model analyses threats considering the attacker has moderate competency.
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="This project uses a competent-based STRIDE Mitigation strategy, which means the system is analysed based on the attacker&#39;s competency. This model analyses threats considering the attacker has moderate competency.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-not-analyse-high-level-attackers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why not analyse high-level attackers?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -526,9 +634,18 @@
 
 
 
-  <h1>Threat Model</h1>
-
-
+<h1 id="threat-model">Threat Model</h1>
+<h3 id="this-project-uses-a-competent-based-stride-mitigation-strategy-which-means-the-system-is-analysed-based-on-the-attackers-competency-this-model-analyses-threats-considering-the-attacker-has-moderate-competency">This project uses a competent-based STRIDE Mitigation strategy, which means the system is analysed based on the attacker's competency. This model analyses threats considering the attacker has moderate competency.</h3>
+<p>• <strong>Spoofing: (Unmitigated)</strong> Due to the HTTPS flag being disabled (False), an attacker can perform a Man-in-the-Middle (MiTM) attack to capture unencrypted authentication tokens in transit. They can then use these stolen credentials to impersonate legitimate devices or users when communicating with the FastAPI backend.</p>
+<p>• <strong>Tampering: (Unmitigated)</strong> Attackers can exploit logical vulnerabilities within third-party FastAPI routers or flawed validation logic to manipulate structural API payloads, tamper with database records, or alter JWT claims.</p>
+<p>• <strong>Repudiation: (Unmitigated)</strong> Attackers may attempt to delete or alter telemetry ingestion logs (removing infection anomalies, login failures, or system events) to hide their tracks. This can be mitigated by streaming logs in real-time to an immutable, centralized logging platform that the FastAPI container cannot alter or delete.</p>
+<p>• <strong>Information Disclosure: (Mitigated)</strong> Attackers can map out system architecture, backend dependencies, and database schemas by forcing unhandled exceptions that return verbose 500 Internal Server Error stack traces or specific try/except messages. This is mitigated by disabling FastAPI debug mode and returning unified, generic errors to the user.</p>
+<p>• <strong>Denial of Service: (Unmitigated)</strong> Attackers can target the resource-heavy /api/telemetry/submit endpoint, rapidly sending telemetry logs to exhaust Uvicorn/Python worker processes and crash the server application.</p>
+<p>• <strong>Elevation of Privilege: (Unmitigated)</strong> If the application container runs with root privileges or misconfigured Linux capabilities, an attacker who successfully achieves Remote Code Execution (RCE) via a framework flaw will automatically inherit root-level control over the environment.</p>
+<h4 id="why-not-analyse-high-level-attackers">Why not analyse high-level attackers?</h4>
+<p>Even if our product is pushed to production, it does <strong>not</strong> mean our system will be targeted by state-sponsored attackers. Our system will be attacked depending on its profile, and how large its infrastructure is and what it solves.</p>
+<p>For example, if our asset and telemetry system tracks devices across the the world internationally or regionally across a country, <strong>then</strong> there is a necessity to do so. Because our threat profile is so high, we must account for those potential security risks and vulnerabilities.</p>
+<p><strong>BUT.</strong> If our system only tracks about 10,000 devices in a specific area, or sparsed out, then its profile is smaller, and only would be a target for smaller and medium-level attackers.</p>
 
 
 
