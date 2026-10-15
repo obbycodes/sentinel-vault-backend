@@ -61,6 +61,11 @@ graph TD
 * **Architectural Guardrails**: Leveraged Large Language Models (LLMs) as technical sounding boards to validate asynchronous async/await loop topologies and audit structural STRIDE threat matrices.
 * **Verification & Synthesis**: Rather than executing blind code generation, AI was utilized to rapidly synthesize boilerplate test structures (Pytest configurations) and document system layouts, which were then manually refactored, type-checked via Pydantic, and verified through our automated local pre-commit gates.
 
+### Software Development Life Cycles (SDLC)
+* **DevOps Framework**: Implemented tight integration between development and quality assurance, leveraging pre-commit hooks and automated CI checks on each PR to enforce software quality standards before deployment.
+* **Incremental Model**: Built and delivered software piece-by-piece. Each Issue and Pull Request (PR) represents a distinct, working increment of the codebase that is safely merged into `main`.
+* **Agile Model**: Working in short, flexible cycles driven by scope-focused GitHub Issues (Features, Chores, Bugs), adapting quickly by isolating work into dedicated feature branches.
+
 ---
 
 ## TRACK B: Cybersecurity Focus (AppSec)
