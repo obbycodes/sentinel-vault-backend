@@ -1,6 +1,8 @@
 # Threat Model
 
-### This project uses a competent-based STRIDE Mitigation strategy, which means the system is analysed based on the attacker's competency. This model analyses threats considering the attacker has moderate competency.
+### This threat model implements a component-based STRIDE analysis assuming that the attacker posesses medium-level competency (Hacker/Skilled Insider). This varies from our model in our README, which only analyses components based on primitive threats.
+
+#### Unmitigated threats are being actively mitigated through our active developer backlog, for more detail, please see our Issues & Pull Requests.
 
 • **Spoofing: (Unmitigated)** Due to the HTTPS flag being disabled (False), an attacker can perform a Man-in-the-Middle (MiTM) attack to capture unencrypted authentication tokens in transit. They can then use these stolen credentials to impersonate legitimate devices or users when communicating with the FastAPI backend.
 
@@ -15,12 +17,9 @@
 • **Elevation of Privilege: (Unmitigated)** If the application container runs with root privileges or misconfigured Linux capabilities, an attacker who successfully achieves Remote Code Execution (RCE) via a framework flaw will automatically inherit root-level control over the environment.
 
 #### Why not analyse high-level attackers?
+
 Even if our product is pushed to production, it does **not** mean our system will be targeted by state-sponsored attackers. Our system will be attacked depending on its profile, and how large its infrastructure is and what it solves.
 
 For example, if our asset and telemetry system tracks devices across the the world internationally or regionally across a country, **then** there is a necessity to do so. Because our threat profile is so high, we must account for those potential security risks and vulnerabilities.
 
 **BUT.** If our system only tracks about 10,000 devices in a specific area, or sparsed out, then its profile is smaller, and only would be a target for smaller and medium-level attackers.
-
-
-
-
