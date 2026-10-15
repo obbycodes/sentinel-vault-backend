@@ -1,14 +1,13 @@
 name: Update Test Ledger on Merge
 
 on:
-  workflow_dispatch:
   pull_request:
     branches: [ main ]
     types: [ closed ]
 
 jobs:
   update-ledger:
-    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     
     permissions:
@@ -47,22 +46,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # 1. Setup local git identity
           git config --local user.email "github-actions[bot]@://github.com"
           git config --local user.name "github-actions[bot]"
           
-          # 2. Create a clean telemetry branch and stage the ledger file
           BRANCH_NAME="automation/test-ledger-update"
           git checkout -b "$BRANCH_NAME"
           git add TEST_HISTORY.md
           
-          # 3. Commit the ledger update
           git commit -m "chore(ci): update TEST_HISTORY.md with merge results"
           
-          # 4. Push to origin (force-update if the automation branch already exists)
           git push origin "$BRANCH_NAME" --force
           
-          # 5. Check if an active PR already exists; if not, open a new one natively
           PR_EXISTS=$(gh pr list --head "$BRANCH_NAME" --json number --jq '.[0].number // empty')
 
           
